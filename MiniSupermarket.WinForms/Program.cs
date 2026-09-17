@@ -12,6 +12,8 @@ namespace MiniSupermarket.WinForms
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new FormCategoryManagement());
+            Application.Run(new FormRoleManagement());
+
         }
     }
 }
