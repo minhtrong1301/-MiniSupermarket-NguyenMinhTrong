@@ -27,8 +27,9 @@
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
+            this.btnLogout = new System.Windows.Forms.Button(); // Nút Đăng xuất
 
-            // Các Label hiển thị nhãn chữ cho đẹp và chuyên nghiệp
+            // Các Label hiển thị nhãn chữ
             this.lblKeyword = new System.Windows.Forms.Label();
             this.lblId = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
@@ -51,7 +52,7 @@
             this.grpDetails.Controls.Add(this.btnAdd);
             this.grpDetails.Controls.Add(this.btnUpdate);
             this.grpDetails.Controls.Add(this.btnDelete);
-            this.grpDetails.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpDetails.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.grpDetails.Location = new System.Drawing.Point(510, 65);
             this.grpDetails.Name = "grpDetails";
             this.grpDetails.Size = new System.Drawing.Size(285, 385);
@@ -80,16 +81,16 @@
             // lblKeyword
             // 
             this.lblKeyword.AutoSize = true;
-            this.lblKeyword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblKeyword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblKeyword.Location = new System.Drawing.Point(20, 15);
             this.lblKeyword.Name = "lblKeyword";
-            this.lblKeyword.Size = new System.Drawing.Size(56, 15);
+            this.lblKeyword.Size = new System.Drawing.Size(59, 15);
             this.lblKeyword.Text = "Tìm kiếm:";
 
             // 
             // txtKeyword
             // 
-            this.txtKeyword.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtKeyword.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtKeyword.Location = new System.Drawing.Point(20, 33);
             this.txtKeyword.Name = "txtKeyword";
             this.txtKeyword.Size = new System.Drawing.Size(210, 24);
@@ -100,7 +101,7 @@
             // 
             this.btnSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnSearch.ForeColor = System.Drawing.Color.White;
             this.btnSearch.Location = new System.Drawing.Point(236, 32);
             this.btnSearch.Name = "btnSearch";
@@ -115,7 +116,7 @@
             // 
             this.btnLoad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.btnLoad.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
-            this.btnLoad.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnLoad.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnLoad.Location = new System.Drawing.Point(322, 32);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(80, 26);
@@ -123,6 +124,21 @@
             this.btnLoad.Text = "Tải lại";
             this.btnLoad.UseVisualStyleBackColor = true;
             this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+
+            // 
+            // btnLogout (Nút Đăng xuất đặt ở phía góc phải trên)
+            // 
+            this.btnLogout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(117)))), ((int)(((byte)(125))))); // Màu xám mờ/đỏ đô
+            this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnLogout.ForeColor = System.Drawing.Color.White;
+            this.btnLogout.Location = new System.Drawing.Point(695, 20);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(100, 30);
+            this.btnLogout.TabIndex = 11;
+            this.btnLogout.Text = "Đăng xuất";
+            this.btnLogout.UseVisualStyleBackColor = false;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
 
             // 
             // Các Label trong khung chi tiết
@@ -149,7 +165,7 @@
             // txtId
             // 
             this.txtId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
-            this.txtId.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtId.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtId.Location = new System.Drawing.Point(20, 53);
             this.txtId.Name = "txtId";
             this.txtId.ReadOnly = true;
@@ -159,7 +175,7 @@
             // 
             // txtCategoryName
             // 
-            this.txtCategoryName.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtCategoryName.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtCategoryName.Location = new System.Drawing.Point(20, 108);
             this.txtCategoryName.Name = "txtCategoryName";
             this.txtCategoryName.Size = new System.Drawing.Size(245, 24);
@@ -168,7 +184,7 @@
             // 
             // txtDescription
             // 
-            this.txtDescription.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtDescription.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtDescription.Location = new System.Drawing.Point(20, 163);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
@@ -180,7 +196,7 @@
             // 
             this.btnAdd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAdd.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnAdd.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnAdd.ForeColor = System.Drawing.Color.White;
             this.btnAdd.Location = new System.Drawing.Point(20, 280);
             this.btnAdd.Name = "btnAdd";
@@ -195,7 +211,7 @@
             // 
             this.btnUpdate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(193)))), ((int)(((byte)(7)))));
             this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUpdate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnUpdate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnUpdate.ForeColor = System.Drawing.Color.Black;
             this.btnUpdate.Location = new System.Drawing.Point(20, 318);
             this.btnUpdate.Name = "btnUpdate";
@@ -210,7 +226,7 @@
             // 
             this.btnDelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDelete.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnDelete.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnDelete.ForeColor = System.Drawing.Color.White;
             this.btnDelete.Location = new System.Drawing.Point(147, 318);
             this.btnDelete.Name = "btnDelete";
@@ -227,13 +243,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(249)))), ((int)(((byte)(250)))));
             this.ClientSize = new System.Drawing.Size(815, 470);
+            this.Controls.Add(this.btnLogout); // Thêm nút đăng xuất vào Form Controls
             this.Controls.Add(this.lblKeyword);
             this.Controls.Add(this.grpDetails);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtKeyword);
             this.Controls.Add(this.dgvCategories);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "FormCategoryManagement";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Quản lý danh mục sản phẩm";
@@ -257,6 +276,7 @@
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.Button btnLogout; // Biến nút Đăng xuất
         private System.Windows.Forms.Label lblKeyword;
         private System.Windows.Forms.Label lblId;
         private System.Windows.Forms.Label lblName;
