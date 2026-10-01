@@ -7,7 +7,7 @@
 namespace MiniSupermarket.API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateDatabase : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +24,23 @@ namespace MiniSupermarket.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    CustomerId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    RewardPoints = table.Column<int>(type: "int", nullable: false),
+                    MembershipRank = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.CustomerId);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,6 +89,28 @@ namespace MiniSupermarket.API.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Customers",
+                columns: new[] { "CustomerId", "Address", "CustomerName", "MembershipRank", "PhoneNumber", "RewardPoints" },
+                values: new object[,]
+                {
+                    { 1, "123 Lê Lợi, Quận 1, TP.HCM", "Nguyễn Văn An", "Bạc", "0912345678", 350 },
+                    { 2, "456 Nguyễn Trãi, Quận 5, TP.HCM", "Trần Thị Bình", "Kim Cương", "0987654321", 1200 },
+                    { 3, "789 Võ Văn Tần, Quận 3, TP.HCM", "Lê Hoàng Cường", "Chuẩn", "0903112233", 50 },
+                    { 4, "12 Điện Biên Phủ, Bình Thạnh, TP.HCM", "Phạm Minh Dung", "Vàng", "0938889900", 750 },
+                    { 5, "88 Lý Thường Kiệt, Tân Bình, TP.HCM", "Hoàng Quốc Dung", "Chuẩn", "0977123456", 0 },
+                    { 6, "54 CMT8, Quận 10, TP.HCM", "Đỗ Thị Giang", "Chuẩn", "0966554433", 150 },
+                    { 7, "301 Hải Phòng, Thanh Khê, Đà Nẵng", "Vũ Hải Đăng", "Bạc", "0944118899", 520 },
+                    { 8, "15 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội", "Ngô Bích Hằng", "Kim Cương", "0918273645", 2100 },
+                    { 9, "67 Nguyễn Văn Cừ, Long Biên, Hà Nội", "Bùi Anh Tuấn", "Vàng", "0922334455", 890 },
+                    { 10, "234 Ba Tháng Hai, Quận 10, TP.HCM", "Đặng Thu Thảo", "Bạc", "0955667788", 410 },
+                    { 11, "11 Phạm Văn Đồng, Thủ Đức, TP.HCM", "Trịnh Quốc Bảo", "Chuẩn", "0909090909", 30 },
+                    { 12, "89 Nguyễn Thị Minh Khai, Quận 3, TP.HCM", "Lý Mỹ Nhân", "Vàng", "0933221100", 1050 },
+                    { 13, "43 Quang Trung, Gò Vấp, TP.HCM", "Dương Văn Khoa", "Bạc", "0978990011", 620 },
+                    { 14, "500 Nam Kỳ Khởi Nghĩa, Quận 3, TP.HCM", "Mai Phương Thúy", "Kim Cương", "0911223344", 1850 },
+                    { 15, "76 Nguyễn Văn Linh, Quận 7, TP.HCM", "Cao Thái Sơn", "Chuẩn", "0945678901", 95 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "ProductId", "Barcode", "CategoryId", "Price", "ProductName", "StockQuantity" },
                 values: new object[,]
@@ -102,6 +141,9 @@ namespace MiniSupermarket.API.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Customers");
+
             migrationBuilder.DropTable(
                 name: "Products");
 
