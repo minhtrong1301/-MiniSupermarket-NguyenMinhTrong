@@ -1,420 +1,200 @@
-# 🛒 HỆ THỐNG QUẢN LÝ SIÊU THỊ MINI (MINISUPERMARKET SYSTEM)
+🛒 HỆ THỐNG QUẢN LÝ SIÊU THỊ MINI (MINISUPERMARKET SYSTEM)
 
-> **Môn học:** Lập trình Ứng dụng .NET Core (Mã môn: 229162)
-> **Buổi thực hành:** Buổi 2 - Xây dựng hệ thống xác thực JWT Authentication và phân quyền API
+Môn học: Lập trình Ứng dụng .NET Core (Mã môn: 229162)
 
----
+Buổi thực hành: Buổi 3 - Kết nối CSDL SQL Server với Entity Framework Core, Data Seeding và quản lý Khách hàng (Customers)
 
-## 🏗️ 1. Mô hình Kiến trúc Hệ thống (Client - Server)
+🏗️ 1. Mô hình Kiến trúc Hệ thống (Client - Server)
 
-Dự án tiếp tục được xây dựng theo mô hình **Client - Server**, trong đó Backend cung cấp các API và Frontend WinForms đóng vai trò ứng dụng máy trạm.
+Dự án tiếp tục được phát triển theo mô hình Client - Server, kết nối cơ sở dữ liệu SQL Server thông qua Entity Framework Core (EF Core) cùng cơ chế JWT Authentication để xác thực và phân quyền API.
 
-Hệ thống được bổ sung cơ chế **JWT Authentication (JSON Web Token)** nhằm xác thực người dùng khi truy cập các API có yêu cầu đăng nhập.
+MiniSupermarket.API (Backend): Dự án ASP.NET Core Web API xử lý xác thực JWT, kết nối SQL Server qua Entity Framework Core, thực hiện Data Seeding và cung cấp các RESTful API quản lý hệ thống.
 
-* **`MiniSupermarket.API` (Backend):** Dự án ASP.NET Core Web API chịu trách nhiệm xử lý xác thực người dùng, cấp JWT Token, kiểm tra quyền truy cập và cung cấp các RESTful API.
-* **`MiniSupermarket.WinForms` (Frontend Client):** Ứng dụng Windows Forms sử dụng `HttpClient` để đăng nhập, nhận JWT Token và gửi Token trong Header khi gọi các API được bảo vệ.
+MiniSupermarket.WinForms (Frontend Client): Ứng dụng Windows Forms sử dụng HttpClient gửi nhận dữ liệu JSON và đính kèm JWT Bearer Token trong Header.
 
 Luồng hoạt động của hệ thống:
 
-```text
 ┌─────────────────────────────┐
 │   MiniSupermarket.WinForms  │
-│       (Client)              │
+│        (Client)             │
 └──────────────┬──────────────┘
                │
-               │ Login / API Request
+               │ API Request (HTTP/JSON)
                │ Authorization: Bearer <JWT>
                ▼
 ┌─────────────────────────────┐
 │     MiniSupermarket.API     │
 │        (Backend)            │
 ├─────────────────────────────┤
-│ Authentication / JWT        │
-│ Authorization / Role        │
+│ JWT Authentication & Role   │
 │ Controllers / API           │
+│ Entity Framework Core (ORM) │
 └──────────────┬──────────────┘
                │
+               │ DbContext / Migrations
                ▼
-        Dữ liệu hệ thống
-```
+┌─────────────────────────────┐
+│      SQL Server Database    │
+│    (MiniSupermarketDb)      │
+└─────────────────────────────┘
 
----
 
-## 🛠️ 2. Công nghệ Sử dụng
+🛠️ 2. Công nghệ Sử dụng
 
-* **Ngôn ngữ:** C# (.NET 8.0)
-* **Backend:** ASP.NET Core Web API
-* **Authentication:** JWT Bearer Authentication
-* **Authorization:** Role-based Authorization
-* **API:** RESTful API, Controllers
-* **Dữ liệu:** In-Memory Data
-* **Xử lý dữ liệu:** LINQ
-* **Frontend:** Windows Forms (.NET 8.0)
-* **HTTP Client:** `HttpClient`, `System.Net.Http.Json`
-* **Kiểm thử API:** Swagger UI
-* **IDE:** Visual Studio 2022
+Ngôn ngữ: C# (.NET 8.0)
 
----
+Backend: ASP.NET Core Web API
 
-## 📂 3. Cấu trúc Solution
+ORM & Database Access: Entity Framework Core 8.0 (Code-First Migration & Data Seeding)
 
-```text
+Database: Microsoft SQL Server (SupermarketDbContext)
+
+Authentication & Authorization: JWT Bearer Authentication, Role-based Authorization
+
+Frontend: Windows Forms (.NET 8.0)
+
+HTTP Client: HttpClient, System.Net.Http.Json
+
+Kiểm thử API: Swagger UI
+
+Quản lý phiên bản: Git & GitHub
+
+📂 3. Cấu trúc Solution
+
 MiniSupermarketSystem/
 │
 ├── MiniSupermarket.API/                  # Dự án Web API (Backend)
 │   ├── Controllers/
 │   │   ├── AuthController.cs             # Đăng nhập và cấp JWT Token
-│   │   └── CategoriesController.cs       # CRUD danh mục
+│   │   ├── CategoriesController.cs       # CRUD Danh mục sản phẩm
+│   │   └── CustomersController.cs        # CRUD Khách hàng (Customers)
+│   │
+│   ├── Data/
+│   │   └── SupermarketDbContext.cs       # EF Core DbContext, Cấu hình Entity & Data Seeding
+│   │
+│   ├── Migrations/                       # Thư mục chứa các bản EF Core Migration
 │   │
 │   ├── Models/
-│   │   ├── Category.cs                    # Model danh mục
-│   │   └── User.cs                        # Model người dùng
+│   │   ├── Category.cs                   # Model danh mục
+│   │   ├── Customer.cs                   # Model khách hàng (CustomerId, CustomerName, PhoneNumber, Address, MembershipRank, RewardPoints)
+│   │   └── User.cs                       # Model người dùng & tài khoản
 │   │
 │   ├── Services/
-│   │   └── JwtService.cs                  # Xử lý tạo JWT Token
+│   │   └── JwtService.cs                 # Service khởi tạo JWT Token
 │   │
-│   ├── Program.cs                         # Cấu hình JWT Authentication
-│   └── appsettings.json                   # Cấu hình JWT
+│   ├── Program.cs                        # Register DbContext, JWT & Dependency Injection
+│   └── appsettings.json                  # Cấu hình ConnectionString & JWT Settings
 │
-└── MiniSupermarket.WinForms/              # Dự án Windows Forms (Frontend)
-    ├── FormLogin.cs                       # Giao diện đăng nhập
-    ├── FormCategoryManagement.cs          # Quản lý danh mục
-    └── ApiClientService.cs                # Gọi API và quản lý JWT Token
-```
+└── MiniSupermarket.WinForms/             # Dự án Windows Forms (Frontend)
+    ├── FormLogin.cs                      # Giao diện đăng nhập
+    ├── FormCategoryManagement.cs         # Quản lý danh mục
+    ├── FormCustomerManagement.cs         # Quản lý khách hàng
+    └── ApiClientService.cs               # Service gọi API và quản lý JWT Token
 
----
 
-# 🔐 4. Chức năng Authentication
+🗄️ 4. Cơ sở dữ liệu & Data Seeding (Customers)
 
-Buổi 2 bổ sung chức năng đăng nhập cho hệ thống.
+Hệ thống đã chuyển sang lưu trữ dữ liệu tập trung trên SQL Server. Entity Customer được cấu hình Data Seeding gồm 15 khách hàng mẫu sẵn có trong cơ sở dữ liệu:
 
-Người dùng gửi tài khoản và mật khẩu đến API:
+Danh sách 15 Khách hàng Seeding mẫu:
 
-```http
-POST /api/auth/login
-```
+Nguyễn Văn An - SĐT: 0912345678 - Hạng: Bạc - Điểm: 350
 
-Ví dụ dữ liệu gửi lên:
+Trần Thị Bình - SĐT: 0987654321 - Hạng: Kim Cương - Điểm: 1200
 
-```json
-{
-  "username": "admin",
-  "password": "123456"
-}
-```
+Lê Hoàng Cường - SĐT: 0903112233 - Hạng: Chuẩn - Điểm: 50
 
-Nếu thông tin đăng nhập hợp lệ, API trả về JWT Token:
+Phạm Minh Dung - SĐT: 0938889900 - Hạng: Vàng - Điểm: 750
 
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIs..."
-}
-```
+Hoàng Quốc Dung - SĐT: 0977123456 - Hạng: Chuẩn - Điểm: 0
 
-Token này được phía WinForms lưu lại để sử dụng cho những lần gọi API tiếp theo.
+Đỗ Thị Giang - SĐT: 0966554433 - Hạng: Chuẩn - Điểm: 150
 
----
+Vũ Hải Đăng - SĐT: 0944118899 - Hạng: Bạc - Điểm: 520
 
-# 🎫 5. JWT Authentication
+Ngô Bích Hằng - SĐT: 0918273645 - Hạng: Kim Cương - Điểm: 2100
 
-JWT được sử dụng để xác thực người dùng khi truy cập các API được bảo vệ.
+Bùi Anh Tuấn - SĐT: 0922334455 - Hạng: Vàng - Điểm: 890
 
-Khi gọi API, WinForms gửi Token thông qua HTTP Header:
+Đặng Thu Thảo - SĐT: 0955667788 - Hạng: Bạc - Điểm: 410
 
-```http
-Authorization: Bearer <JWT_TOKEN>
-```
+Trịnh Quốc Bảo - SĐT: 0909090909 - Hạng: Chuẩn - Điểm: 30
 
-Ví dụ:
+Lý Mỹ Nhân - SĐT: 0933221100 - Hạng: Vàng - Điểm: 1050
 
-```http
-GET /api/categories
-Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
-```
+Dương Văn Khoa - SĐT: 0978990011 - Hạng: Bạc - Điểm: 620
 
-Backend sẽ kiểm tra Token trước khi cho phép request tiếp tục xử lý.
+Mai Phương Thúy - SĐT: 0911223344 - Hạng: Kim Cương - Điểm: 1850
 
-Nếu Token hợp lệ:
+Cao Thái Sơn - SĐT: 0945678901 - Hạng: Chuẩn - Điểm: 95
 
-```text
-Client
-   │
-   │ Bearer Token
-   ▼
-JWT Authentication
-   │
-   ├── Hợp lệ ──► Cho phép truy cập API
-   │
-   └── Không hợp lệ ──► HTTP 401 Unauthorized
-```
+⚙️ 5. Hướng dẫn Khởi tạo & Cập nhật Database (EF Core Migrations)
 
----
+Khi làm mới database hoặc cập nhật Data Seeding trong SupermarketDbContext.cs, thực hiện các bước sau trong Package Manager Console (PMC):
 
-# 👮 6. Phân quyền người dùng
+# 1. Xóa CSDL cũ (nếu muốn reset sạch)
+Drop-Database
 
-Hệ thống hỗ trợ phân quyền dựa trên **Role**.
+# 2. Tạo bản Migration mới
+Add-Migration InitialCreate
 
-Ví dụ:
+# 3. Cập nhật schema và nạp 15 dữ liệu Seeding vào SQL Server
+Update-Database
 
-| Role  | Quyền                                  |
-| ----- | -------------------------------------- |
-| Admin | Quản lý toàn bộ hệ thống               |
-| Staff | Thực hiện các chức năng được cấp quyền |
 
-Các API có thể được bảo vệ bằng:
+🔐 6. Xử lý Quản lý Version với Git
 
-```csharp
-[Authorize]
-```
+Quy trình commit và đồng bộ code lên GitHub branch Buoi3:
 
-Hoặc giới hạn theo Role:
+# 1. Kiểm tra trạng thái thay đổi
+git status
 
-```csharp
-[Authorize(Roles = "Admin")]
-```
+# 2. Thêm tất cả thay đổi vào Staging
+git add .
 
-Ví dụ:
+# 3. Commit thay đổi
+git commit -m "Update customer seed data to 15 records and reset migrations"
 
-```text
-Admin
- ├── Xem danh mục
- ├── Thêm danh mục
- ├── Sửa danh mục
- └── Xóa danh mục
+# 4. Push lên GitHub (Dùng --force nếu cần đè lại lịch sử Migration mới)
+git push origin Buoi3 --force
 
-Staff
- └── Chỉ được truy cập các chức năng được cấp phép
-```
 
----
+🧪 7. Kiểm thử API bằng Swagger UI
 
-# 🧪 7. Kiểm thử API bằng Swagger
+Sau khi khởi chạy MiniSupermarket.API:
 
-Sau khi chạy `MiniSupermarket.API`, mở giao diện Swagger UI.
+Đăng nhập: Gọi POST /api/auth/login với tài khoản admin (admin / 123456) để lấy JWT Token.
 
-Thực hiện kiểm thử theo thứ tự:
+Xác thực: Bấm nút Authorize trên góc Swagger UI và dán Token vào dạng Bearer <JWT_TOKEN>.
 
-### Bước 1: Đăng nhập
+Thao tác Khách hàng (CustomersController):
 
-Gọi:
+GET /api/customers: Lấy danh sách 15 khách hàng seeding.
 
-```http
-POST /api/auth/login
-```
+GET /api/customers/{id}: Xem thông tin chi tiết một khách hàng.
 
-Nhập:
+POST /api/customers: Thêm mới khách hàng.
 
-```json
-{
-  "username": "admin",
-  "password": "123456"
-}
-```
+PUT /api/customers/{id}: Cập nhật thông tin khách hàng.
 
-Lấy giá trị `token` trong response.
+DELETE /api/customers/{id}: Xóa khách hàng.
 
-### Bước 2: Authorize
+📌 8. Kết quả Đạt được (Buổi 3)
 
-Nhấn nút **Authorize** trên Swagger.
+Kết nối thành công ASP.NET Core Web API với cơ sở dữ liệu SQL Server thông qua Entity Framework Core.
 
-Nhập:
+Xây dựng Entity Customer và cấu hình Data Seeding đầy đủ 15 khách hàng đa dạng các hạng thành viên (Chuẩn, Bạc, Vàng, Kim Cương).
 
-```text
-Bearer <JWT_TOKEN>
-```
+Quản lý sạch sẽ lịch sử Migration và cập nhật cơ sở dữ liệu nhất quán.
 
-Sau đó nhấn **Authorize**.
+Xây dựng đầy đủ RESTful API hỗ trợ các thao tác CRUD Khách hàng kết hợp phân quyền JWT Authentication.
 
-### Bước 3: Gọi API được bảo vệ
+Đồng bộ và đẩy mã nguồn hoàn chỉnh lên Git / GitHub branch Buoi3.
 
-Thử các API:
+👨‍💻 9. Tác giả
 
-```http
-GET
-POST
-PUT
-DELETE
-```
+Họ tên sinh viên: Nguyễn Minh Trọng
 
-Nếu Token hợp lệ, API sẽ xử lý request bình thường.
+Mã sinh viên: 2124110253
 
-Nếu chưa đăng nhập hoặc Token không hợp lệ, API sẽ trả về:
-
-```http
-401 Unauthorized
-```
-
-Nếu đã đăng nhập nhưng không có đủ quyền:
-
-```http
-403 Forbidden
-```
-
----
-
-# 🖥️ 8. Kết nối WinForms với API
-
-Phía `MiniSupermarket.WinForms` được bổ sung giao diện đăng nhập.
-
-Quy trình sử dụng:
-
-```text
-Mở ứng dụng
-     │
-     ▼
-Form Login
-     │
-     │ Username + Password
-     ▼
-POST /api/auth/login
-     │
-     ▼
-Nhận JWT Token
-     │
-     ▼
-Lưu Token
-     │
-     ▼
-Mở Form quản lý
-     │
-     ▼
-Gọi API kèm Bearer Token
-```
-
-Ví dụ khi gọi API:
-
-```csharp
-client.DefaultRequestHeaders.Authorization =
-    new AuthenticationHeaderValue("Bearer", token);
-```
-
-Sau đó WinForms có thể thực hiện các thao tác CRUD đối với danh mục.
-
----
-
-# 🚀 9. Hướng dẫn Chạy và Kiểm thử Dự án
-
-## Bước 1: Chạy Backend
-
-Mở Solution bằng **Visual Studio 2022**.
-
-Nhấp chuột phải vào:
-
-```text
-MiniSupermarket.API
-```
-
-Chọn:
-
-```text
-Set as Startup Project
-```
-
-Nhấn:
-
-```text
-F5
-```
-
-Swagger UI sẽ được mở trên trình duyệt.
-
----
-
-## Bước 2: Kiểm tra Authentication
-
-Trên Swagger:
-
-1. Mở API Login.
-2. Nhập Username và Password.
-3. Gửi request.
-4. Copy JWT Token được trả về.
-5. Nhấn **Authorize**.
-6. Nhập:
-
-```text
-Bearer <JWT_TOKEN>
-```
-
-7. Thực hiện gọi các API yêu cầu xác thực.
-
----
-
-## Bước 3: Chạy WinForms Client
-
-Nhấp chuột phải vào:
-
-```text
-MiniSupermarket.WinForms
-```
-
-Chọn:
-
-```text
-Debug → Start new instance
-```
-
-Form Login sẽ được hiển thị.
-
-Nhập tài khoản:
-
-```text
-Username: admin
-Password: 123456
-```
-
-Sau khi đăng nhập thành công, hệ thống chuyển đến màn hình quản lý danh mục.
-
----
-
-## Bước 4: Kiểm thử CRUD
-
-Thực hiện các chức năng:
-
-* Đăng nhập hệ thống.
-* Tải danh sách danh mục.
-* Thêm danh mục.
-* Tìm kiếm danh mục.
-* Cập nhật danh mục.
-* Xóa danh mục.
-* Kiểm tra quyền truy cập API.
-* Kiểm tra trường hợp Token không hợp lệ hoặc hết hạn.
-
----
-
-# 🔒 10. Kiểm thử các trường hợp Authentication
-
-| Trường hợp                       | Kết quả mong đợi      |
-| -------------------------------- | --------------------- |
-| Username + Password đúng         | Đăng nhập thành công  |
-| Username sai                     | Đăng nhập thất bại    |
-| Password sai                     | Đăng nhập thất bại    |
-| Không có JWT Token               | `401 Unauthorized`    |
-| JWT Token không hợp lệ           | `401 Unauthorized`    |
-| Token hợp lệ nhưng không đủ Role | `403 Forbidden`       |
-| Token hợp lệ và đúng Role        | Cho phép truy cập API |
-
----
-
-# 📌 11. Kết quả đạt được
-
-Sau khi hoàn thành Buổi 2, hệ thống có các chức năng chính:
-
-* Xây dựng Web API bằng ASP.NET Core .NET 8.
-* Xây dựng chức năng đăng nhập.
-* Sử dụng JWT để xác thực người dùng.
-* Bảo vệ API bằng `[Authorize]`.
-* Phân quyền người dùng bằng Role.
-* Kết nối WinForms Client với Web API.
-* Gửi JWT Token từ WinForms đến Backend.
-* Thực hiện CRUD danh mục thông qua API.
-* Kiểm thử Authentication và Authorization bằng Swagger.
-
----
-
-## 👨‍💻 12. Tác giả
-
-**Họ tên sinh viên:** Nguyễn Minh Trọng
-
-**Mã sinh viên:** 2124110253
-
-**Lớp học phần:** CCQ2411D
+Lớp học phần: CCQ2411D
