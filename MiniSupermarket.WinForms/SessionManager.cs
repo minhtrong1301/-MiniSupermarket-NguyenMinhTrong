@@ -10,9 +10,9 @@ namespace MiniSupermarket.WinForms
     public static class SessionManager
     {
         public static string JwtToken { get; set; } = string.Empty;
+        public static string CurrentUsername { get; set; } = string.Empty;
         public static string CurrentRole { get; set; } = string.Empty;
     }
-
     public static class ApiClientService
     {
         // ⚠️ Đảm bảo port khớp với cổng Web API của bạn (ví dụ 7195)

@@ -21,16 +21,23 @@ namespace MiniSupermarket.API.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequestDto request)
         {
-            // Kiểm tra tài khoản mẫu (Trong thực tế sẽ truy vấn qua EF Core / SQL Server)
-            if (request.Username == "admin" && request.Password == "123456")
+            // 1. Kiểm tra tài khoản Quản trị viên (Admin)
+            if ((request.Username == "admin" || request.Username == "admin01") && request.Password == "123456")
             {
                 var token = GenerateJwtToken(request.Username, "Admin");
                 return Ok(new { success = true, token = token, role = "Admin" });
             }
-            else if (request.Username == "cashier" && request.Password == "123456")
+            // 2. Kiểm tra tài khoản Thu ngân (Cashier)
+            else if ((request.Username == "cashier" || request.Username == "cashier01") && request.Password == "123456")
             {
                 var token = GenerateJwtToken(request.Username, "Cashier");
                 return Ok(new { success = true, token = token, role = "Cashier" });
+            }
+            // 3. Kiểm tra tài khoản Thủ kho (Warehouse) - BỔ SUNG THÊM
+            else if ((request.Username == "warehouse" || request.Username == "ware01") && request.Password == "123456")
+            {
+                var token = GenerateJwtToken(request.Username, "Warehouse");
+                return Ok(new { success = true, token = token, role = "Warehouse" });
             }
 
             return Unauthorized(new { success = false, message = "Sai tài khoản hoặc mật khẩu!" });

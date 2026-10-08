@@ -5,7 +5,6 @@ namespace MiniSupermarket.WinForms
 {
     public partial class FormLogin : Form
     {
-
         // Khởi tạo HttpClient trỏ đến địa chỉ của Web API Backend
         private static readonly HttpClient _client = new HttpClient
         {
@@ -42,17 +41,20 @@ namespace MiniSupermarket.WinForms
                     var jsonString = await response.Content.ReadAsStringAsync();
                     using var doc = JsonDocument.Parse(jsonString);
 
-                    // Trích xuất Token và Role lưu vào lớp tĩnh SessionManager dùng chung toàn ứng dụng
+                    // 1. Lưu Username người nhập vào SessionManager
+                    SessionManager.CurrentUsername = username;
+
+                    // 2. Trích xuất Token và Role lưu vào lớp tĩnh SessionManager dùng chung toàn ứng dụng
                     SessionManager.JwtToken = doc.RootElement.GetProperty("token").GetString() ?? string.Empty;
                     SessionManager.CurrentRole = doc.RootElement.GetProperty("role").GetString() ?? string.Empty;
 
                     MessageBox.Show($"Đăng nhập thành công với quyền: {SessionManager.CurrentRole}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Mở Form quản lý chính (FormCategoryManagement) và ẩn Form đăng nhập đi
-                    FormCategoryManagement mainForm = new FormCategoryManagement();
+                    // 3. Mở Màn hình Khung quản lý chính (FormMainShell) và ẩn Form đăng nhập đi
+                    FormMainShell mainShell = new FormMainShell();
                     this.Hide();
-                    mainForm.ShowDialog();
-                    this.Close(); // Đóng hẳn ứng dụng khi form chính tắt
+                    mainShell.ShowDialog();
+                    this.Close(); // Đóng hẳn ứng dụng khi FormMainShell tắt
                 }
                 else
                 {
