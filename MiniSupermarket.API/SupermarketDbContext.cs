@@ -215,6 +215,45 @@ namespace MiniSupermarket.API.Data
                 }
             );
 
+            // 4. Data Seeding cho Orders (15 hóa đơn mẫu).
+            modelBuilder.Entity<Order>().HasData(
+                new Order { OrderId = 1, CashierUsername = "cashier01", CustomerId = 1, CustomerPhone = "0912345678", OrderDate = new DateTime(2026, 10, 1, 9, 0, 0), TotalAmount = 180000, CashReceived = 200000, ChangeAmount = 20000 },
+                new Order { OrderId = 2, CashierUsername = "cashier02", CustomerId = 2, CustomerPhone = "0987654321", OrderDate = new DateTime(2026, 10, 1, 10, 0, 0), TotalAmount = 32000, CashReceived = 50000, ChangeAmount = 18000 },
+                new Order { OrderId = 3, CashierUsername = "cashier01", CustomerId = 3, CustomerPhone = "0903112233", OrderDate = new DateTime(2026, 10, 2, 11, 0, 0), TotalAmount = 115000, CashReceived = 150000, ChangeAmount = 35000 },
+                new Order { OrderId = 4, CashierUsername = "cashier03", CustomerId = 4, CustomerPhone = "0938889900", OrderDate = new DateTime(2026, 10, 2, 14, 0, 0), TotalAmount = 18000, CashReceived = 20000, ChangeAmount = 2000 },
+                new Order { OrderId = 5, CashierUsername = "cashier02", CustomerId = 5, CustomerPhone = "0977123456", OrderDate = new DateTime(2026, 10, 3, 8, 30, 0), TotalAmount = 10000, CashReceived = 20000, ChangeAmount = 10000 },
+                new Order { OrderId = 6, CashierUsername = "cashier04", CustomerId = 6, CustomerPhone = "0966554433", OrderDate = new DateTime(2026, 10, 3, 15, 0, 0), TotalAmount = 38000, CashReceived = 50000, ChangeAmount = 12000 },
+                new Order { OrderId = 7, CashierUsername = "cashier01", CustomerId = 7, CustomerPhone = "0944118899", OrderDate = new DateTime(2026, 10, 4, 9, 30, 0), TotalAmount = 28000, CashReceived = 30000, ChangeAmount = 2000 },
+                new Order { OrderId = 8, CashierUsername = "cashier05", CustomerId = 8, CustomerPhone = "0918273645", OrderDate = new DateTime(2026, 10, 4, 16, 0, 0), TotalAmount = 30000, CashReceived = 50000, ChangeAmount = 20000 },
+                new Order { OrderId = 9, CashierUsername = "cashier02", CustomerId = 9, CustomerPhone = "0922334455", OrderDate = new DateTime(2026, 10, 5, 10, 0, 0), TotalAmount = 25000, CashReceived = 50000, ChangeAmount = 25000 },
+                new Order { OrderId = 10, CashierUsername = "cashier03", CustomerId = 10, CustomerPhone = "0955667788", OrderDate = new DateTime(2026, 10, 5, 13, 0, 0), TotalAmount = 35000, CashReceived = 50000, ChangeAmount = 15000 },
+                new Order { OrderId = 11, CashierUsername = "cashier04", CustomerId = 11, CustomerPhone = "0909090909", OrderDate = new DateTime(2026, 10, 6, 9, 0, 0), TotalAmount = 45000, CashReceived = 50000, ChangeAmount = 5000 },
+                new Order { OrderId = 12, CashierUsername = "cashier01", CustomerId = 12, CustomerPhone = "0933221100", OrderDate = new DateTime(2026, 10, 6, 14, 30, 0), TotalAmount = 22000, CashReceived = 30000, ChangeAmount = 8000 },
+                new Order { OrderId = 13, CashierUsername = "cashier05", CustomerId = 13, CustomerPhone = "0978990011", OrderDate = new DateTime(2026, 10, 7, 11, 0, 0), TotalAmount = 105000, CashReceived = 150000, ChangeAmount = 45000 },
+                new Order { OrderId = 14, CashierUsername = "cashier02", CustomerId = 14, CustomerPhone = "0911223344", OrderDate = new DateTime(2026, 10, 7, 15, 0, 0), TotalAmount = 42000, CashReceived = 50000, ChangeAmount = 8000 },
+                new Order { OrderId = 15, CashierUsername = "cashier03", CustomerId = 15, CustomerPhone = "0945678901", OrderDate = new DateTime(2026, 10, 8, 10, 0, 0), TotalAmount = 25000, CashReceived = 30000, ChangeAmount = 5000 }
+            );
+
+            // 5. Data Seeding cho OrderDetails (15 dòng chi tiết).
+            modelBuilder.Entity<OrderDetail>().HasData(
+                new OrderDetail { OrderDetailId = 1, OrderId = 1, ProductId = 1, Quantity = 1, UnitPrice = 180000 },
+                new OrderDetail { OrderDetailId = 2, OrderId = 2, ProductId = 2, Quantity = 1, UnitPrice = 32000 },
+                new OrderDetail { OrderDetailId = 3, OrderId = 3, ProductId = 3, Quantity = 1, UnitPrice = 115000 },
+                new OrderDetail { OrderDetailId = 4, OrderId = 4, ProductId = 4, Quantity = 1, UnitPrice = 18000 },
+                new OrderDetail { OrderDetailId = 5, OrderId = 5, ProductId = 5, Quantity = 1, UnitPrice = 10000 },
+                new OrderDetail { OrderDetailId = 6, OrderId = 6, ProductId = 6, Quantity = 1, UnitPrice = 38000 },
+                new OrderDetail { OrderDetailId = 7, OrderId = 7, ProductId = 7, Quantity = 1, UnitPrice = 28000 },
+                new OrderDetail { OrderDetailId = 8, OrderId = 8, ProductId = 8, Quantity = 1, UnitPrice = 30000 },
+                new OrderDetail { OrderDetailId = 9, OrderId = 9, ProductId = 9, Quantity = 1, UnitPrice = 25000 },
+                new OrderDetail { OrderDetailId = 10, OrderId = 10, ProductId = 10, Quantity = 1, UnitPrice = 35000 },
+                new OrderDetail { OrderDetailId = 11, OrderId = 11, ProductId = 11, Quantity = 1, UnitPrice = 45000 },
+                new OrderDetail { OrderDetailId = 12, OrderId = 12, ProductId = 12, Quantity = 1, UnitPrice = 22000 },
+                new OrderDetail { OrderDetailId = 13, OrderId = 13, ProductId = 13, Quantity = 1, UnitPrice = 105000 },
+                new OrderDetail { OrderDetailId = 14, OrderId = 14, ProductId = 14, Quantity = 1, UnitPrice = 42000 },
+                new OrderDetail { OrderDetailId = 15, OrderId = 15, ProductId = 15, Quantity = 1, UnitPrice = 25000 }
+            );
+
+
         }
     }
 }

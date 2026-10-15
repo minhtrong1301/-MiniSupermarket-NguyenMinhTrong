@@ -198,6 +198,7 @@ namespace MiniSupermarket.API.Controllers
                     cashReceived = order.CashReceived,
                     changeAmount = order.ChangeAmount
                 });
+
             }
             catch (Exception)
             {
@@ -209,6 +210,42 @@ namespace MiniSupermarket.API.Controllers
                 });
             }
         }
+
+        // GET: api/orders/quick-report
+        [HttpGet("quick-report")]
+        public async Task<IActionResult> GetQuickReport()
+        {
+            // Đếm tổng số hóa đơn
+            int totalOrders = await _context.Orders.CountAsync();
+
+            // Tính tổng doanh thu từ các hóa đơn
+            decimal totalRevenue = await _context.Orders
+                .SumAsync(o => (decimal?)o.TotalAmount) ?? 0;
+
+            // Tìm sản phẩm bán chạy nhất dựa trên tổng số lượng đã bán
+            var bestSeller = await _context.OrderDetails
+                .GroupBy(d => new
+                {
+                    d.ProductId,
+                    ProductName = d.Product!.ProductName
+                })
+                .Select(g => new
+                {
+                    ProductName = g.Key.ProductName,
+                    TotalQuantity = g.Sum(d => d.Quantity)
+                })
+                .OrderByDescending(x => x.TotalQuantity)
+                .FirstOrDefaultAsync();
+
+            return Ok(new
+            {
+                totalOrders,
+                totalRevenue,
+                bestSeller = bestSeller?.ProductName ?? "Chưa có dữ liệu",
+                bestSellerQuantity = bestSeller?.TotalQuantity ?? 0
+            });
+        }
+
     }
 
     // Dữ liệu WinForms gửi lên API

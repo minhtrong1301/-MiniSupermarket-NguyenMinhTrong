@@ -345,6 +345,173 @@ namespace MiniSupermarket.API.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            OrderId = 1,
+                            CashReceived = 200000m,
+                            CashierUsername = "cashier01",
+                            ChangeAmount = 20000m,
+                            CustomerId = 1,
+                            CustomerPhone = "0912345678",
+                            OrderDate = new DateTime(2026, 10, 1, 9, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 180000m
+                        },
+                        new
+                        {
+                            OrderId = 2,
+                            CashReceived = 50000m,
+                            CashierUsername = "cashier02",
+                            ChangeAmount = 18000m,
+                            CustomerId = 2,
+                            CustomerPhone = "0987654321",
+                            OrderDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 32000m
+                        },
+                        new
+                        {
+                            OrderId = 3,
+                            CashReceived = 150000m,
+                            CashierUsername = "cashier01",
+                            ChangeAmount = 35000m,
+                            CustomerId = 3,
+                            CustomerPhone = "0903112233",
+                            OrderDate = new DateTime(2026, 10, 2, 11, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 115000m
+                        },
+                        new
+                        {
+                            OrderId = 4,
+                            CashReceived = 20000m,
+                            CashierUsername = "cashier03",
+                            ChangeAmount = 2000m,
+                            CustomerId = 4,
+                            CustomerPhone = "0938889900",
+                            OrderDate = new DateTime(2026, 10, 2, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 18000m
+                        },
+                        new
+                        {
+                            OrderId = 5,
+                            CashReceived = 20000m,
+                            CashierUsername = "cashier02",
+                            ChangeAmount = 10000m,
+                            CustomerId = 5,
+                            CustomerPhone = "0977123456",
+                            OrderDate = new DateTime(2026, 10, 3, 8, 30, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 10000m
+                        },
+                        new
+                        {
+                            OrderId = 6,
+                            CashReceived = 50000m,
+                            CashierUsername = "cashier04",
+                            ChangeAmount = 12000m,
+                            CustomerId = 6,
+                            CustomerPhone = "0966554433",
+                            OrderDate = new DateTime(2026, 10, 3, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 38000m
+                        },
+                        new
+                        {
+                            OrderId = 7,
+                            CashReceived = 30000m,
+                            CashierUsername = "cashier01",
+                            ChangeAmount = 2000m,
+                            CustomerId = 7,
+                            CustomerPhone = "0944118899",
+                            OrderDate = new DateTime(2026, 10, 4, 9, 30, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 28000m
+                        },
+                        new
+                        {
+                            OrderId = 8,
+                            CashReceived = 50000m,
+                            CashierUsername = "cashier05",
+                            ChangeAmount = 20000m,
+                            CustomerId = 8,
+                            CustomerPhone = "0918273645",
+                            OrderDate = new DateTime(2026, 10, 4, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 30000m
+                        },
+                        new
+                        {
+                            OrderId = 9,
+                            CashReceived = 50000m,
+                            CashierUsername = "cashier02",
+                            ChangeAmount = 25000m,
+                            CustomerId = 9,
+                            CustomerPhone = "0922334455",
+                            OrderDate = new DateTime(2026, 10, 5, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 25000m
+                        },
+                        new
+                        {
+                            OrderId = 10,
+                            CashReceived = 50000m,
+                            CashierUsername = "cashier03",
+                            ChangeAmount = 15000m,
+                            CustomerId = 10,
+                            CustomerPhone = "0955667788",
+                            OrderDate = new DateTime(2026, 10, 5, 13, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 35000m
+                        },
+                        new
+                        {
+                            OrderId = 11,
+                            CashReceived = 50000m,
+                            CashierUsername = "cashier04",
+                            ChangeAmount = 5000m,
+                            CustomerId = 11,
+                            CustomerPhone = "0909090909",
+                            OrderDate = new DateTime(2026, 10, 6, 9, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 45000m
+                        },
+                        new
+                        {
+                            OrderId = 12,
+                            CashReceived = 30000m,
+                            CashierUsername = "cashier01",
+                            ChangeAmount = 8000m,
+                            CustomerId = 12,
+                            CustomerPhone = "0933221100",
+                            OrderDate = new DateTime(2026, 10, 6, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 22000m
+                        },
+                        new
+                        {
+                            OrderId = 13,
+                            CashReceived = 150000m,
+                            CashierUsername = "cashier05",
+                            ChangeAmount = 45000m,
+                            CustomerId = 13,
+                            CustomerPhone = "0978990011",
+                            OrderDate = new DateTime(2026, 10, 7, 11, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 105000m
+                        },
+                        new
+                        {
+                            OrderId = 14,
+                            CashReceived = 50000m,
+                            CashierUsername = "cashier02",
+                            ChangeAmount = 8000m,
+                            CustomerId = 14,
+                            CustomerPhone = "0911223344",
+                            OrderDate = new DateTime(2026, 10, 7, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 42000m
+                        },
+                        new
+                        {
+                            OrderId = 15,
+                            CashReceived = 30000m,
+                            CashierUsername = "cashier03",
+                            ChangeAmount = 5000m,
+                            CustomerId = 15,
+                            CustomerPhone = "0945678901",
+                            OrderDate = new DateTime(2026, 10, 8, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            TotalAmount = 25000m
+                        });
                 });
 
             modelBuilder.Entity("MiniSupermarket.API.Models.OrderDetail", b =>
@@ -374,6 +541,128 @@ namespace MiniSupermarket.API.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            OrderDetailId = 1,
+                            OrderId = 1,
+                            ProductId = 1,
+                            Quantity = 1,
+                            UnitPrice = 180000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 2,
+                            OrderId = 2,
+                            ProductId = 2,
+                            Quantity = 1,
+                            UnitPrice = 32000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 3,
+                            OrderId = 3,
+                            ProductId = 3,
+                            Quantity = 1,
+                            UnitPrice = 115000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 4,
+                            OrderId = 4,
+                            ProductId = 4,
+                            Quantity = 1,
+                            UnitPrice = 18000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 5,
+                            OrderId = 5,
+                            ProductId = 5,
+                            Quantity = 1,
+                            UnitPrice = 10000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 6,
+                            OrderId = 6,
+                            ProductId = 6,
+                            Quantity = 1,
+                            UnitPrice = 38000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 7,
+                            OrderId = 7,
+                            ProductId = 7,
+                            Quantity = 1,
+                            UnitPrice = 28000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 8,
+                            OrderId = 8,
+                            ProductId = 8,
+                            Quantity = 1,
+                            UnitPrice = 30000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 9,
+                            OrderId = 9,
+                            ProductId = 9,
+                            Quantity = 1,
+                            UnitPrice = 25000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 10,
+                            OrderId = 10,
+                            ProductId = 10,
+                            Quantity = 1,
+                            UnitPrice = 35000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 11,
+                            OrderId = 11,
+                            ProductId = 11,
+                            Quantity = 1,
+                            UnitPrice = 45000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 12,
+                            OrderId = 12,
+                            ProductId = 12,
+                            Quantity = 1,
+                            UnitPrice = 22000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 13,
+                            OrderId = 13,
+                            ProductId = 13,
+                            Quantity = 1,
+                            UnitPrice = 105000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 14,
+                            OrderId = 14,
+                            ProductId = 14,
+                            Quantity = 1,
+                            UnitPrice = 42000m
+                        },
+                        new
+                        {
+                            OrderDetailId = 15,
+                            OrderId = 15,
+                            ProductId = 15,
+                            Quantity = 1,
+                            UnitPrice = 25000m
+                        });
                 });
 
             modelBuilder.Entity("MiniSupermarket.API.Models.Product", b =>

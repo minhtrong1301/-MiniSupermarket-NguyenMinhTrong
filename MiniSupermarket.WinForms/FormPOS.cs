@@ -172,11 +172,12 @@ namespace MiniSupermarket.WinForms
 
             try
             {
+
                 var orderRequest = new
                 {
                     CashierUsername = SessionManager.CurrentUsername,
                     CustomerPhone = txtCustomerPhone.Text.Trim(),
-                    TotalAmount = total,
+                    CashReceived = cashReceived,
                     Items = _cart.Select(i => new
                     {
                         i.ProductId,
@@ -184,6 +185,7 @@ namespace MiniSupermarket.WinForms
                         i.UnitPrice
                     }).ToList()
                 };
+
 
                 var response = await ApiClientService.PostWithTokenAsync("orders/checkout", orderRequest);
 
