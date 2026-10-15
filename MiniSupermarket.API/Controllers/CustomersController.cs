@@ -37,19 +37,31 @@ namespace MiniSupermarket.API.Controllers
         }
 
         // 3. GET: /api/customers/search?keyword=... - Tìm kiếm theo tên hoặc số điện thoại
-        [HttpGet("search")]
-        public async Task<IActionResult> Search([FromQuery] string keyword)
+
+        [HttpGet("phone/{phone}")]
+        public async Task<IActionResult> GetByPhone(string phone)
         {
-            if (string.IsNullOrWhiteSpace(keyword))
+            if (string.IsNullOrWhiteSpace(phone))
             {
-                return BadRequest(new { message = "Vui lòng nhập từ khóa tìm kiếm!" });
+                return BadRequest(new
+                {
+                    message = "Vui lòng nhập số điện thoại!"
+                });
             }
 
-            var result = await _context.Customers
-                .Where(c => c.CustomerName.Contains(keyword) || c.PhoneNumber.Contains(keyword))
-                .ToListAsync();
+            var customer = await _context.Customers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.PhoneNumber == phone);
 
-            return Ok(result);
+            if (customer == null)
+            {
+                return NotFound(new
+                {
+                    message = "Không tìm thấy khách hàng!"
+                });
+            }
+
+            return Ok(customer);
         }
 
         // 4. POST: /api/customers - Thêm mới khách hàng
