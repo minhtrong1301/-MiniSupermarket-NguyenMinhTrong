@@ -116,20 +116,61 @@ namespace MiniSupermarket.WinForms
         }
 
         // 6. Quản trị Tài khoản (Đang bỏ qua để test)
+
         private void btnUserManage_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Chức năng Quản lý User hiện đang tạm tắt!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Chỉ Admin mới được quản lý tài khoản.
+            if (SessionManager.CurrentRole != "Admin")
+            {
+                MessageBox.Show(
+                    "Bạn không có quyền quản lý tài khoản!",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            // Nhúng FormUserManagement vào vùng nội dung màn hình chính.
+            OpenChildForm(
+                new FormUserManagement(),
+                "QUẢN LÝ TÀI KHOẢN",
+                btnUserManage);
         }
 
+
+
         // 7. Thoát ứng dụng
+
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            var confirm = MessageBox.Show("Bạn có chắc chắn muốn thoát ứng dụng?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (confirm == DialogResult.Yes)
+            DialogResult confirm = MessageBox.Show(
+                "Bạn có chắc chắn muốn đăng xuất không?",
+                "Xác nhận đăng xuất",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            // Xóa thông tin phiên đăng nhập hiện tại.
+            SessionManager.JwtToken = string.Empty;
+            SessionManager.CurrentUsername = string.Empty;
+            SessionManager.CurrentRole = string.Empty;
+
+            // Ẩn màn hình chính.
+            this.Hide();
+
+            // Mở lại màn hình đăng nhập.
+            using (FormLogin loginForm = new FormLogin())
             {
-                Application.Exit();
+                loginForm.ShowDialog();
             }
+
+            // Đóng màn hình chính sau khi đóng form đăng nhập.
+            this.Close();
         }
+
 
         #endregion
     }

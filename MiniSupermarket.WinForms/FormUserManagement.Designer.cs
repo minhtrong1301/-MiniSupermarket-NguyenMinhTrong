@@ -1,146 +1,208 @@
-﻿//namespace MiniSupermarket.WinForms
-//{
-//    partial class FormUserManagement
-//    {
-//        private System.ComponentModel.IContainer components = null;
+﻿namespace MiniSupermarket.WinForms
+{
+    partial class FormUserManagement
+    {
+        private System.ComponentModel.IContainer components = null;
 
-//        protected override void Dispose(bool disposing)
-//        {
-//            if (disposing && (components != null))
-//            {
-//                components.Dispose();
-//            }
-//            base.Dispose(disposing);
-//        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-//        #region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-//        private void InitializeComponent()
-//        {
-//            this.panelInputs = new System.Windows.Forms.Panel();
-//            this.lblUsername = new System.Windows.Forms.Label();
-//            this.txtUsername = new System.Windows.Forms.TextBox();
-//            this.lblPassword = new System.Windows.Forms.Label();
-//            this.txtPassword = new System.Windows.Forms.TextBox();
-//            this.lblFullName = new System.Windows.Forms.Label();
-//            this.txtFullName = new System.Windows.Forms.TextBox();
-//            this.lblRole = new System.Windows.Forms.Label();
-//            this.cboRole = new System.Windows.Forms.ComboBox();
-//            this.btnAddUser = new System.Windows.Forms.Button();
-//            this.btnResetPassword = new System.Windows.Forms.Button();
-//            this.btnToggleLock = new System.Windows.Forms.Button();
-//            this.dgvUsers = new System.Windows.Forms.DataGridView();
-//            this.panelInputs.SuspendLayout();
-//            ((System.ComponentModel.ISupportInitialize)(this.dgvUsers)).BeginInit();
-//            this.SuspendLayout();
+        private void InitializeComponent()
+        {
+            panelInputs = new Panel();
+            lblUsername = new Label();
+            txtUsername = new TextBox();
+            lblPassword = new Label();
+            txtPassword = new TextBox();
+            lblFullName = new Label();
+            txtFullName = new TextBox();
+            lblRole = new Label();
+            cboRole = new ComboBox();
+            btnAddUser = new Button();
+            btnResetPassword = new Button();
+            btnToggleLock = new Button();
+            btnEditUser = new Button();
+            dgvUsers = new DataGridView();
+            panelInputs.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvUsers).BeginInit();
+            SuspendLayout();
+            // 
+            // panelInputs
+            // 
+            panelInputs.Controls.Add(lblUsername);
+            panelInputs.Controls.Add(txtUsername);
+            panelInputs.Controls.Add(lblPassword);
+            panelInputs.Controls.Add(txtPassword);
+            panelInputs.Controls.Add(lblFullName);
+            panelInputs.Controls.Add(txtFullName);
+            panelInputs.Controls.Add(lblRole);
+            panelInputs.Controls.Add(cboRole);
+            panelInputs.Controls.Add(btnAddUser);
+            panelInputs.Controls.Add(btnResetPassword);
+            panelInputs.Controls.Add(btnToggleLock);
+            panelInputs.Controls.Add(btnEditUser);
+            panelInputs.Dock = DockStyle.Top;
+            panelInputs.Location = new Point(0, 0);
+            panelInputs.Name = "panelInputs";
+            panelInputs.Size = new Size(950, 150);
+            panelInputs.TabIndex = 0;
+            // 
+            // lblUsername
+            // 
+            lblUsername.AutoSize = true;
+            lblUsername.Location = new Point(20, 20);
+            lblUsername.Name = "lblUsername";
+            lblUsername.Size = new Size(88, 15);
+            lblUsername.TabIndex = 0;
+            lblUsername.Text = "Tên đăng nhập:";
+            // 
+            // txtUsername
+            // 
+            txtUsername.Location = new Point(120, 17);
+            txtUsername.Name = "txtUsername";
+            txtUsername.Size = new Size(180, 23);
+            txtUsername.TabIndex = 1;
+            // 
+            // lblPassword
+            // 
+            lblPassword.AutoSize = true;
+            lblPassword.Location = new Point(320, 20);
+            lblPassword.Name = "lblPassword";
+            lblPassword.Size = new Size(60, 15);
+            lblPassword.TabIndex = 2;
+            lblPassword.Text = "Mật khẩu:";
+            // 
+            // txtPassword
+            // 
+            txtPassword.Location = new Point(390, 17);
+            txtPassword.Name = "txtPassword";
+            txtPassword.PasswordChar = '*';
+            txtPassword.Size = new Size(180, 23);
+            txtPassword.TabIndex = 3;
+            // 
+            // lblFullName
+            // 
+            lblFullName.AutoSize = true;
+            lblFullName.Location = new Point(20, 60);
+            lblFullName.Name = "lblFullName";
+            lblFullName.Size = new Size(61, 15);
+            lblFullName.TabIndex = 4;
+            lblFullName.Text = "Họ và tên:";
+            // 
+            // txtFullName
+            // 
+            txtFullName.Location = new Point(120, 57);
+            txtFullName.Name = "txtFullName";
+            txtFullName.Size = new Size(180, 23);
+            txtFullName.TabIndex = 5;
+            // 
+            // lblRole
+            // 
+            lblRole.AutoSize = true;
+            lblRole.Location = new Point(320, 60);
+            lblRole.Name = "lblRole";
+            lblRole.Size = new Size(43, 15);
+            lblRole.TabIndex = 6;
+            lblRole.Text = "Vai trò:";
+            // 
+            // cboRole
+            // 
+            cboRole.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboRole.Location = new Point(390, 57);
+            cboRole.Name = "cboRole";
+            cboRole.Size = new Size(180, 23);
+            cboRole.TabIndex = 7;
+            // 
+            // btnAddUser
+            // 
+            btnAddUser.Location = new Point(120, 100);
+            btnAddUser.Name = "btnAddUser";
+            btnAddUser.Size = new Size(120, 32);
+            btnAddUser.TabIndex = 8;
+            btnAddUser.Text = "Thêm Tài Khoản";
+            btnAddUser.UseVisualStyleBackColor = true;
+            btnAddUser.Click += btnAddUser_Click;
+            // 
+            // btnResetPassword
+            // 
+            btnResetPassword.Location = new Point(250, 100);
+            btnResetPassword.Name = "btnResetPassword";
+            btnResetPassword.Size = new Size(130, 32);
+            btnResetPassword.TabIndex = 9;
+            btnResetPassword.Text = "Đặt Lại Mật Khẩu";
+            btnResetPassword.UseVisualStyleBackColor = true;
+            btnResetPassword.Click += btnResetPassword_Click;
+            // 
+            // btnToggleLock
+            // 
+            btnToggleLock.Location = new Point(390, 100);
+            btnToggleLock.Name = "btnToggleLock";
+            btnToggleLock.Size = new Size(140, 32);
+            btnToggleLock.TabIndex = 10;
+            btnToggleLock.Text = "Khóa / Mở Khóa";
+            btnToggleLock.UseVisualStyleBackColor = true;
+            btnToggleLock.Click += btnToggleLock_Click;
+            // 
+            // btnEditUser
+            // 
+            btnEditUser.Location = new Point(540, 100);
+            btnEditUser.Name = "btnEditUser";
+            btnEditUser.Size = new Size(120, 32);
+            btnEditUser.TabIndex = 11;
+            btnEditUser.Text = "Sửa Tài Khoản";
+            btnEditUser.UseVisualStyleBackColor = true;
+            btnEditUser.Click += btnEditUser_Click;
+            // 
+            // dgvUsers
+            // 
+            dgvUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvUsers.Dock = DockStyle.Fill;
+            dgvUsers.Location = new Point(0, 150);
+            dgvUsers.MultiSelect = false;
+            dgvUsers.Name = "dgvUsers";
+            dgvUsers.ReadOnly = true;
+            dgvUsers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvUsers.Size = new Size(950, 400);
+            dgvUsers.TabIndex = 1;
+            dgvUsers.SelectionChanged += dgvUsers_SelectionChanged;
+            // 
+            // FormUserManagement
+            // 
+            ClientSize = new Size(950, 550);
+            Controls.Add(dgvUsers);
+            Controls.Add(panelInputs);
+            Name = "FormUserManagement";
+            Text = "Quản Lý Tài Khoản";
+            Load += FormUserManagement_Load;
+            panelInputs.ResumeLayout(false);
+            panelInputs.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvUsers).EndInit();
+            ResumeLayout(false);
+        }
 
-//            // panelInputs
-//            this.panelInputs.Controls.Add(this.lblUsername);
-//            this.panelInputs.Controls.Add(this.txtUsername);
-//            this.panelInputs.Controls.Add(this.lblPassword);
-//            this.panelInputs.Controls.Add(this.txtPassword);
-//            this.panelInputs.Controls.Add(this.lblFullName);
-//            this.panelInputs.Controls.Add(this.txtFullName);
-//            this.panelInputs.Controls.Add(this.lblRole);
-//            this.panelInputs.Controls.Add(this.cboRole);
-//            this.panelInputs.Controls.Add(this.btnAddUser);
-//            this.panelInputs.Controls.Add(this.btnResetPassword);
-//            this.panelInputs.Controls.Add(this.btnToggleLock);
-//            this.panelInputs.Dock = System.Windows.Forms.DockStyle.Top;
-//            this.panelInputs.Location = new System.Drawing.Point(0, 0);
-//            this.panelInputs.Name = "panelInputs";
-//            this.panelInputs.Size = new System.Drawing.Size(950, 150);
-//            this.panelInputs.TabIndex = 0;
+        #endregion
 
-//            // lblUsername & txtUsername
-//            this.lblUsername.AutoSize = true;
-//            this.lblUsername.Location = new System.Drawing.Point(20, 20);
-//            this.lblUsername.Text = "Tên đăng nhập:";
-//            this.txtUsername.Location = new System.Drawing.Point(120, 17);
-//            this.txtUsername.Size = new System.Drawing.Size(180, 23);
-
-//            // lblPassword & txtPassword
-//            this.lblPassword.AutoSize = true;
-//            this.lblPassword.Location = new System.Drawing.Point(320, 20);
-//            this.lblPassword.Text = "Mật khẩu:";
-//            this.txtPassword.Location = new System.Drawing.Point(390, 17);
-//            this.txtPassword.PasswordChar = '*';
-//            this.txtPassword.Size = new System.Drawing.Size(180, 23);
-
-//            // lblFullName & txtFullName
-//            this.lblFullName.AutoSize = true;
-//            this.lblFullName.Location = new System.Drawing.Point(20, 60);
-//            this.lblFullName.Text = "Họ và tên:";
-//            this.txtFullName.Location = new System.Drawing.Point(120, 57);
-//            this.txtFullName.Size = new System.Drawing.Size(180, 23);
-
-//            // lblRole & cboRole
-//            this.lblRole.AutoSize = true;
-//            this.lblRole.Location = new System.Drawing.Point(320, 60);
-//            this.lblRole.Text = "Vai trò:";
-//            this.cboRole.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-//            this.cboRole.Location = new System.Drawing.Point(390, 57);
-//            this.cboRole.Size = new System.Drawing.Size(180, 23);
-
-//            // Nút Thêm User
-//            this.btnAddUser.Location = new System.Drawing.Point(120, 100);
-//            this.btnAddUser.Size = new System.Drawing.Size(120, 32);
-//            this.btnAddUser.Text = "Thêm Tài Khoản";
-//            this.btnAddUser.UseVisualStyleBackColor = true;
-//            this.btnAddUser.Click += new System.EventHandler(this.btnAddUser_Click);
-
-//            // Nút Reset Mật Khẩu
-//            this.btnResetPassword.Location = new System.Drawing.Point(250, 100);
-//            this.btnResetPassword.Size = new System.Drawing.Size(130, 32);
-//            this.btnResetPassword.Text = "Đặt Lại Mật Khẩu";
-//            this.btnResetPassword.UseVisualStyleBackColor = true;
-//            this.btnResetPassword.Click += new System.EventHandler(this.btnResetPassword_Click);
-
-//            // Nút Khóa / Mở Khóa
-//            this.btnToggleLock.Location = new System.Drawing.Point(390, 100);
-//            this.btnToggleLock.Size = new System.Drawing.Size(140, 32);
-//            this.btnToggleLock.Text = "Khóa / Mở Khóa";
-//            this.btnToggleLock.UseVisualStyleBackColor = true;
-//            this.btnToggleLock.Click += new System.EventHandler(this.btnToggleLock_Click);
-
-//            // dgvUsers
-//            this.dgvUsers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-//            this.dgvUsers.Dock = System.Windows.Forms.DockStyle.Fill;
-//            this.dgvUsers.Location = new System.Drawing.Point(0, 150);
-//            this.dgvUsers.MultiSelect = false;
-//            this.dgvUsers.Name = "dgvUsers";
-//            this.dgvUsers.ReadOnly = true;
-//            this.dgvUsers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-//            this.dgvUsers.Size = new System.Drawing.Size(950, 400);
-//            this.dgvUsers.TabIndex = 1;
-
-//            // FormUserManagement
-//            this.ClientSize = new System.Drawing.Size(950, 550);
-//            this.Controls.Add(this.dgvUsers);
-//            this.Controls.Add(this.panelInputs);
-//            this.Name = "FormUserManagement";
-//            this.Text = "Quản Lý Tài Khoản";
-//            this.Load += new System.EventHandler(this.FormUserManagement_Load);
-//            this.panelInputs.ResumeLayout(false);
-//            this.panelInputs.PerformLayout();
-//            ((System.ComponentModel.ISupportInitialize)(this.dgvUsers)).EndInit();
-//            this.ResumeLayout(false);
-//        }
-
-//        #endregion
-
-//        private System.Windows.Forms.Panel panelInputs;
-//        private System.Windows.Forms.Label lblUsername;
-//        private System.Windows.Forms.TextBox txtUsername;
-//        private System.Windows.Forms.Label lblPassword;
-//        private System.Windows.Forms.TextBox txtPassword;
-//        private System.Windows.Forms.Label lblFullName;
-//        private System.Windows.Forms.TextBox txtFullName;
-//        private System.Windows.Forms.Label lblRole;
-//        private System.Windows.Forms.ComboBox cboRole;
-//        private System.Windows.Forms.Button btnAddUser;
-//        private System.Windows.Forms.Button btnResetPassword;
-//        private System.Windows.Forms.Button btnToggleLock;
-//        private System.Windows.Forms.DataGridView dgvUsers;
-//    }
-//}
+        private System.Windows.Forms.Panel panelInputs;
+        private System.Windows.Forms.Label lblUsername;
+        private System.Windows.Forms.TextBox txtUsername;
+        private System.Windows.Forms.Label lblPassword;
+        private System.Windows.Forms.TextBox txtPassword;
+        private System.Windows.Forms.Label lblFullName;
+        private System.Windows.Forms.TextBox txtFullName;
+        private System.Windows.Forms.Label lblRole;
+        private System.Windows.Forms.ComboBox cboRole;
+        private System.Windows.Forms.Button btnAddUser;
+        private System.Windows.Forms.Button btnResetPassword;
+        private System.Windows.Forms.Button btnToggleLock;
+        private System.Windows.Forms.DataGridView dgvUsers;
+        private System.Windows.Forms.Button btnEditUser;
+    }
+}

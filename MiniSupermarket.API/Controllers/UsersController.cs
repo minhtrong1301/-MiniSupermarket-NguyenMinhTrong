@@ -154,6 +154,55 @@ namespace MiniSupermarket.API.Controllers
                 isActive = user.IsActive
             });
         }
+
+        // 6. Cập nhật họ tên và vai trò của tài khoản.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateUserDto dto)
+        {
+            // Kiểm tra dữ liệu đầu vào.
+            if (string.IsNullOrWhiteSpace(dto.FullName) ||
+                string.IsNullOrWhiteSpace(dto.Role))
+            {
+                return BadRequest(new
+                {
+                    message = "Vui lòng nhập đầy đủ họ tên và vai trò!"
+                });
+            }
+
+            // Chỉ chấp nhận các vai trò đã quy định.
+            if (dto.Role != "Admin" &&
+                dto.Role != "Cashier" &&
+                dto.Role != "Warehouse")
+            {
+                return BadRequest(new
+                {
+                    message = "Vai trò không hợp lệ!"
+                });
+            }
+
+            // Tìm tài khoản cần cập nhật.
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound(new
+                {
+                    message = "Không tìm thấy tài khoản!"
+                });
+            }
+
+            // Chỉ cập nhật hai trường được phép chỉnh sửa.
+            user.FullName = dto.FullName.Trim();
+            user.Role = dto.Role;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                message = "Cập nhật tài khoản thành công!"
+            });
+        }
+
     }
 
     // Dữ liệu nhận khi tạo tài khoản.
@@ -169,5 +218,12 @@ namespace MiniSupermarket.API.Controllers
     public class ResetPasswordDto
     {
         public string NewPassword { get; set; } = string.Empty;
+    }
+
+    // Dữ liệu nhận khi cập nhật tài khoản.
+    public class UpdateUserDto
+    {
+        public string FullName { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
     }
 }
