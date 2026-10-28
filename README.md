@@ -1,78 +1,64 @@
-# 🛒 HỆ THỐNG QUẢN LÝ SIÊU THỊ MINI (MINISUPERMARKET SYSTEM)
+🛒 HỆ THỐNG QUẢN LÝ SIÊU THỊ MINI (MINISUPERMARKET SYSTEM)
+Môn học: Lập trình Ứng dụng .NET Core (Mã môn: 229162)
 
-**Môn học:** Lập trình Ứng dụng .NET Core (Mã môn: 229162)
+Buổi thực hành: Buổi 5 - ADO.NET nâng cao, Stored Procedure và giao dịch POS Checkout
+🏗️ 1. Mô hình Kiến trúc Hệ thống (Client - Server)
+Dự án tiếp tục phát triển theo mô hình Client - Server, sử dụng ASP.NET Core Web API kết hợp với Windows Forms. Các chức năng JWT, phân quyền và quản lý tài khoản của Buổi 4 được giữ lại. Buổi 5 tập trung vào ADO.NET, Stored Procedure và transaction trong nghiệp vụ POS Checkout.
 
-**Buổi thực hành:** Buổi 4 - Xác thực JWT, phân quyền người dùng và quản lý tài khoản (Users Management)
+MiniSupermarket.API (Backend): Tiếp nhận yêu cầu thanh toán, kiểm tra dữ liệu đầu vào và thực hiện nghiệp vụ checkout. ADO.NET có thể được sử dụng với SqlConnection, SqlCommand, SqlParameter để gọi Stored Procedure và quản lý giao dịch SQL.
 
----
+MiniSupermarket.WinForms (Frontend Client): Cung cấp giao diện POS để quét mã vạch, thêm sản phẩm vào giỏ, tra cứu khách hàng, nhập số tiền khách đưa và gửi yêu cầu thanh toán đến API. Các yêu cầu dùng HttpClient và JWT Bearer Token khi endpoint yêu cầu xác thực.
 
-## 🏗️ 1. Mô hình Kiến trúc Hệ thống (Client - Server)
+SQL Server: Lưu sản phẩm, tồn kho, đơn hàng và chi tiết đơn hàng. Các thao tác tạo đơn và cập nhật tồn kho cần được thực hiện nhất quán.
 
-Dự án tiếp tục được phát triển theo mô hình Client - Server, sử dụng ASP.NET Core Web API kết hợp với Windows Forms. Hệ thống xác thực người dùng bằng JWT (JSON Web Token), phân quyền truy cập theo vai trò và lưu trữ thông tin tài khoản trên SQL Server thông qua Entity Framework Core.
-
-**MiniSupermarket.API (Backend):** Xử lý đăng nhập, tạo JWT Token, xác thực người dùng, phân quyền truy cập API và cung cấp các chức năng quản lý tài khoản.
-
-**MiniSupermarket.WinForms (Frontend Client):** Cung cấp giao diện đăng nhập và quản lý tài khoản. Ứng dụng sử dụng `HttpClient` để gửi yêu cầu đến API, truyền JWT Bearer Token trong Header khi gọi các API cần xác thực.
-
-**Luồng hoạt động của hệ thống:**
-
-```text
-┌────────────────────────────────┐
-│     MiniSupermarket.WinForms   │
-│          (Client)              │
-├────────────────────────────────┤
-│ FormLogin                      │
-│ FormMainShell                  │
-│ FormUserManagement             │
-│ SessionManager / ApiClient     │
-└───────────────┬────────────────┘
-                │
-                │ HTTP Request / JSON
-                │ Authorization: Bearer <JWT>
-                ▼
-┌────────────────────────────────┐
-│       MiniSupermarket.API      │
-├────────────────────────────────┤
-│ AuthController                 │
-│ UsersController                │
-│ JWT Authentication             │
-│ Role-based Authorization       │
-│ Entity Framework Core          │
-└───────────────┬────────────────┘
-                │
-                │ DbContext / SQL Queries
-                ▼
-┌────────────────────────────────┐
-│        SQL Server              │
-│  NguyenMinhTrong_MiniSupermarketDb │
-├────────────────────────────────┤
-│ Users / Customers / Products   │
-│ Orders / OrderDetails          │
-└────────────────────────────────┘
-```
-
----
-
-## 🛠️ 2. Công nghệ Sử dụng
-
-- **Ngôn ngữ:** C#.
-- **Nền tảng:** .NET 8.0.
-- **Backend:** ASP.NET Core Web API.
-- **ORM:** Entity Framework Core 8.
-- **Database:** Microsoft SQL Server Express.
-- **Xác thực:** JWT Bearer Authentication.
-- **Mã hóa mật khẩu:** `PasswordHasher<string>` của ASP.NET Core Identity.
-- **Phân quyền:** Role-based Authorization.
-- **Frontend:** Windows Forms (.NET 8.0).
-- **Giao tiếp API:** `HttpClient`, `System.Net.Http.Json`.
-- **Kiểm thử API:** Swagger UI.
-- **Quản lý mã nguồn:** Git và GitHub.
-
----
-
-## 📂 3. Cấu trúc Solution
-
-```text
+Luồng hoạt động dự kiến:
+┌────────────────────────────────────┐
+│       MiniSupermarket.WinForms     │
+├────────────────────────────────────┤
+│ FormPOS                            │
+│ Quét mã vạch / Giỏ hàng             │
+│ Thông tin khách hàng / Thanh toán   │
+│ ApiClientService / SessionManager   │
+└──────────────────┬─────────────────┘
+                   │ HTTP Request / JSON
+                   │ Authorization: Bearer <JWT>
+                   ▼
+┌────────────────────────────────────┐
+│         MiniSupermarket.API        │
+├────────────────────────────────────┤
+│ OrdersController / Checkout        │
+│ Kiểm tra dữ liệu yêu cầu            │
+│ ADO.NET / SqlCommand                │
+│ Gọi Stored Procedure                │
+│ SQL Transaction                     │
+└──────────────────┬─────────────────┘
+                   │ SqlConnection / SqlCommand
+                   ▼
+┌────────────────────────────────────┐
+│             SQL Server             │
+├────────────────────────────────────┤
+│ Products / Customers                │
+│ Orders / OrderDetails               │
+│ Stored Procedure xử lý checkout    │
+│ Cập nhật tồn kho                   │
+└────────────────────────────────────┘
+Sơ đồ là luồng mục tiêu của Buổi 5. Tên controller, endpoint và Stored Procedure cần khớp với mã nguồn thực tế.
+🛠️ 2. Công nghệ sử dụng
+- Ngôn ngữ: C#.
+- Nền tảng: .NET 8.0.
+- Backend: ASP.NET Core Web API.
+- ORM hiện có: Entity Framework Core 8, tiếp tục sử dụng cho các chức năng hiện tại.
+- Truy cập dữ liệu Buổi 5: ADO.NET với SqlConnection, SqlCommand, SqlParameter và SqlTransaction khi phù hợp.
+- Cơ sở dữ liệu: Microsoft SQL Server Express.
+- Stored Procedure: Đóng gói các thao tác SQL cho nghiệp vụ checkout.
+- Giao dịch dữ liệu: SQL Transaction để bảo đảm các thao tác liên quan thành công cùng nhau hoặc được rollback.
+- Xác thực: JWT Bearer Authentication, kế thừa từ Buổi 4.
+- Frontend: Windows Forms (.NET 8.0).
+- Giao tiếp API: HttpClient, System.Net.Http.Json.
+- Kiểm thử API: Swagger UI.
+- Quản lý mã nguồn: Git và GitHub.
+📂 3. Cấu trúc Solution
+Cấu trúc dưới đây chỉ mô tả các thành phần liên quan. Giữ nguyên file hiện có; chỉ thêm file khi thực sự cần và sau khi đối chiếu mã nguồn.
 MiniSupermarketSystem/
 │
 ├── MiniSupermarket.API/
@@ -82,314 +68,157 @@ MiniSupermarketSystem/
 │   │   ├── ProductsController.cs
 │   │   ├── OrdersController.cs
 │   │   └── UsersController.cs
-│   │
+│   ├── DTOs/
+│   │   └── CheckoutRequestDto.cs (nếu project tách DTO)
 │   ├── Models/
 │   │   ├── User.cs
 │   │   ├── Customer.cs
 │   │   ├── Product.cs
 │   │   ├── Order.cs
 │   │   └── OrderDetail.cs
-│   │
-│   ├── Services/
-│   │   ├── JwtService.cs
-│   │   └── PasswordService.cs
-│   │
+│   ├── Services/ (nếu có service riêng)
 │   ├── Migrations/
 │   ├── SupermarketDbContext.cs
 │   ├── Program.cs
 │   └── appsettings.json
 │
 └── MiniSupermarket.WinForms/
-    ├── FormLogin.cs
-    ├── FormMainShell.cs
-    ├── FormUserManagement.cs
-    ├── FormUserManagement.Designer.cs
-    ├── FormCustomerManagement.cs
-    ├── FormProductManagement.cs
     ├── FormPOS.cs
+    ├── FormPOS.Designer.cs
+    ├── ApiClientService.cs
     ├── SessionManager.cs
     └── Program.cs
-```
+Lưu ý: Không cần tạo lại toàn bộ file hoặc xóa/đổi tên file đang được Buổi 4 sử dụng.
+🧾 4. Nghiệp vụ POS Checkout
+4.1. Quy trình bán hàng
+1. Nhân viên đăng nhập vào hệ thống.
+2. Quét mã vạch hoặc tìm sản phẩm để thêm vào giỏ hàng.
+3. Kiểm tra tên sản phẩm, đơn giá, số lượng và thành tiền.
+4. Tra cứu khách hàng bằng số điện thoại nếu cần.
+5. Nhập số tiền khách đưa.
+6. Gửi yêu cầu checkout từ WinForms đến API.
+7. API kiểm tra dữ liệu và thực hiện lưu đơn hàng, chi tiết đơn hàng, cập nhật tồn kho.
+8. Trả kết quả về WinForms để hiển thị thông báo và cập nhật giao diện.
+4.2. Nguyên tắc dữ liệu
+- API không nên tin tưởng hoàn toàn giá và tổng tiền do client gửi lên; cần kiểm tra lại thông tin sản phẩm từ database.
+- Số lượng mua phải lớn hơn 0.
+- Kiểm tra tồn kho trước khi trừ hàng.
+- Dùng tham số SQL (SqlParameter) thay vì nối chuỗi trực tiếp để hạn chế SQL Injection.
+- Tạo đơn hàng, thêm chi tiết và trừ tồn kho nên nằm trong cùng một giao dịch.
+- Nếu một bước thất bại, rollback để tránh đơn hàng và tồn kho ở trạng thái không nhất quán.
+- Kiểm tra khả năng gửi lặp yêu cầu thanh toán để hạn chế tạo đơn hàng trùng.
+4.3. Stored Procedure
+Stored Procedure đóng gói các câu lệnh SQL cho một nghiệp vụ cụ thể. Với Buổi 5, có thể xây dựng Stored Procedure cho checkout, nhưng tên procedure, tham số và cấu trúc bảng phải được xác định dựa trên database thực tế.
 
-*Lưu ý: Cấu trúc trên mô tả các thành phần chính của dự án. Tên hoặc vị trí một số tệp có thể khác tùy theo phiên bản mã nguồn hiện tại.*
+Trước khi triển khai cần xác minh:
+- Tên bảng và cột thực tế của Products, Orders, OrderDetails.
+- Cách lưu giá, số lượng, khách hàng và nhân viên thu ngân.
+- Stored Procedure đã tồn tại hay chưa.
+- Transaction được quản lý trong Stored Procedure hay trong C#; cần chọn cách nhất quán, tránh quản lý trùng không cần thiết.
+4.4. Giao dịch SQL Transaction
+Giao dịch giúp bảo đảm tính toàn vẹn dữ liệu. Luồng tổng quát:
+BEGIN TRANSACTION
+    Kiểm tra sản phẩm và tồn kho
+    Tạo đơn hàng
+    Lưu chi tiết đơn hàng
+    Trừ tồn kho
+COMMIT nếu tất cả thành công
+ROLLBACK nếu có lỗi
+Nếu dùng SqlTransaction trong C#, các câu lệnh liên quan cần dùng cùng SqlConnection và gắn với transaction đó. Nếu Stored Procedure tự quản lý transaction, cần xác định rõ cách xử lý lỗi và rollback ở phía SQL.
+🔌 5. API và tích hợp WinForms
+Các endpoint sau là những endpoint cần kiểm tra trong project; không tự ý đổi route đang được FormPOS.cs sử dụng.
+Phương thức	Endpoint tham khảo	Chức năng
+GET	/api/Products	Lấy danh sách sản phẩm
+GET	/api/Products/barcode/{barcode}	Tra cứu sản phẩm bằng mã vạch, nếu đã triển khai
+GET	/api/Customers/phone/{phone}	Tra cứu khách hàng bằng số điện thoại, nếu đã triển khai
+POST	/api/Orders/checkout	Gửi yêu cầu thanh toán, nếu route hiện tại dùng endpoint này
 
----
 
-## 🗄️ 4. Quản lý tài khoản và Data Seeding
+FormPOS sử dụng ApiClientService để gọi API. Cần giữ nguyên cấu trúc request/response và route đang được backend triển khai; nếu endpoint thực tế khác bảng tham khảo trên, README phải cập nhật theo mã nguồn.
 
-Trong buổi thực hành này, hệ thống được bổ sung chức năng quản lý tài khoản người dùng. Thông tin tài khoản được lưu trong bảng `Users` trên SQL Server.
-
-### 4.1. Cấu trúc tài khoản
-
-Model `User` gồm các thuộc tính chính:
-
-| Thuộc tính | Ý nghĩa |
-|---|---|
-| `Id` | Mã tài khoản |
-| `Username` | Tên đăng nhập |
-| `PasswordHash` | Mật khẩu đã được băm |
-| `FullName` | Họ và tên người dùng |
-| `Role` | Vai trò tài khoản |
-| `IsActive` | Trạng thái hoạt động |
-
-Mật khẩu không được lưu trực tiếp dưới dạng văn bản thông thường. Hệ thống sử dụng `PasswordHasher<string>` để băm mật khẩu và kiểm tra mật khẩu khi đăng nhập.
-
-### 4.2. Dữ liệu tài khoản mẫu
-
-Hệ thống đã bổ sung 15 tài khoản mẫu bằng cơ chế Data Seeding trong `SupermarketDbContext.cs`.
-
-| STT | Tên đăng nhập | Vai trò |
-|---:|---|---|
-| 1 | `admin01` | Admin |
-| 2 | `admin02` | Admin |
-| 3 | `cashier01` | Cashier |
-| 4 | `cashier02` | Cashier |
-| 5 | `cashier03` | Cashier |
-| 6 | `cashier04` | Cashier |
-| 7 | `cashier05` | Cashier |
-| 8 | `ware01` | Warehouse |
-| 9 | `ware02` | Warehouse |
-| 10 | `ware03` | Warehouse |
-| 11 | `ware04` | Warehouse |
-| 12 | `admin_backup` | Admin |
-| 13 | `cashier06` | Cashier |
-| 14 | `ware05` | Warehouse |
-| 15 | `supervisor` | Admin |
-
-**Tài khoản kiểm thử:** `admin01`
-
-**Mật khẩu ban đầu:** `123456`
-
-Các tài khoản mẫu được sử dụng để kiểm thử chức năng đăng nhập và phân quyền trong môi trường thực hành. Không nên sử dụng mật khẩu mẫu này cho hệ thống thực tế.
-
-### 4.3. Phân quyền người dùng
-
-Hệ thống hiện có ba vai trò:
-
-- **Admin:** Có quyền truy cập chức năng quản lý tài khoản.
-- **Cashier:** Dành cho nhân viên thu ngân.
-- **Warehouse:** Dành cho nhân viên quản lý kho.
-
-API quản lý tài khoản sử dụng `[Authorize(Roles = "Admin")]` để giới hạn quyền truy cập. Người dùng chưa đăng nhập hoặc không có quyền phù hợp sẽ không được phép thực hiện các thao tác quản trị.
-
----
-
-## 🔐 5. Chức năng xác thực và quản lý tài khoản
-
-### 5.1. Đăng nhập bằng JWT
-
-API `POST /api/Auth/login` tiếp nhận tên đăng nhập và mật khẩu. Khi thông tin hợp lệ, hệ thống trả về JWT Token cùng thông tin người dùng và vai trò.
-
-WinForms lưu thông tin phiên đăng nhập trong `SessionManager`, sau đó đính kèm Token vào Header của các yêu cầu API cần xác thực:
-
-```http
-Authorization: Bearer <JWT_TOKEN>
-```
-
-### 5.2. Danh sách API quản lý tài khoản
-
-| Phương thức | Endpoint | Chức năng |
-|---|---|---|
-| POST | `/api/Auth/login` | Đăng nhập |
-| GET | `/api/Users` | Lấy danh sách tài khoản |
-| POST | `/api/Users` | Tạo tài khoản mới |
-| PUT | `/api/Users/{id}/reset-password` | Đặt lại mật khẩu |
-| PUT | `/api/Users/{id}/toggle-lock` | Khóa hoặc mở khóa tài khoản |
-
-Các API quản lý tài khoản yêu cầu quyền Admin.
-
-### 5.3. Giao diện quản lý tài khoản
-
-Giao diện `FormUserManagement` được xây dựng trên Windows Forms, bao gồm:
-
-- Hiển thị danh sách tài khoản bằng `DataGridView`.
-- Nhập tên đăng nhập, mật khẩu, họ tên và vai trò.
-- Thêm tài khoản mới thông qua API.
-- Chọn tài khoản để đặt lại mật khẩu.
-- Khóa hoặc mở khóa tài khoản.
-- Tải lại danh sách sau khi cập nhật dữ liệu.
-- Hiển thị thông báo khi thao tác thành công hoặc thất bại.
-
-### 5.4. Tích hợp vào giao diện chính
-
-`FormMainShell` tích hợp chức năng quản lý tài khoản vào cửa sổ chính của ứng dụng.
-
-Khi người dùng chọn chức năng quản lý tài khoản, hệ thống kiểm tra vai trò hiện tại. Chỉ tài khoản có vai trò `Admin` mới được phép mở giao diện quản lý tài khoản.
-
----
-
-## ⚙️ 6. Hướng dẫn khởi chạy dự án
-
-### Bước 1. Chuẩn bị môi trường
-
-Cài đặt hoặc kiểm tra các thành phần sau:
-
+Thông tin thường có trong yêu cầu checkout:
+- Tên hoặc mã nhân viên thu ngân.
+- Số điện thoại khách hàng (có thể để trống nếu cho phép khách vãng lai).
+- Số tiền khách đưa.
+- Danh sách sản phẩm gồm ProductId, Quantity và UnitPrice nếu DTO hiện tại đang sử dụng các trường này.
+Các trường bắt buộc và cách tính tổng tiền phải khớp với DTO/controller hiện tại. Không tạo DTO hoặc đổi tên thuộc tính nếu chưa kiểm tra code thực tế.
+⚙️ 6. Hướng dẫn khởi chạy dự án
+Bước 1. Chuẩn bị môi trường
 - .NET 8 SDK.
 - Visual Studio hoặc Visual Studio Code.
-- SQL Server Express và SQL Server Management Studio (SSMS), nếu cần giao diện quản lý CSDL.
-- Các gói NuGet cần thiết của dự án.
-
-### Bước 2. Kiểm tra cấu hình kết nối CSDL
-
-Mở tệp `appsettings.json` trong dự án API và kiểm tra `ConnectionStrings` cùng cấu hình JWT.
-
-Đảm bảo Connection String trỏ đến đúng SQL Server instance và database đang sử dụng. Không đưa mật khẩu thật hoặc khóa bí mật dùng trong môi trường triển khai lên GitHub.
-
-### Bước 3. Cập nhật Database bằng EF Core
-
-Mở Terminal tại thư mục `MiniSupermarket.API`, sau đó kiểm tra các migration hiện có:
-
-```powershell
+- SQL Server Express và SSMS nếu cần quản lý cơ sở dữ liệu.
+- Các gói NuGet đã được khai báo trong project.
+Bước 2. Kiểm tra cấu hình database
+Mở MiniSupermarket.API/appsettings.json, kiểm tra connection string và cấu hình JWT. Không đưa mật khẩu thật hoặc khóa bí mật lên GitHub.
+Bước 3. Kiểm tra database và migration
+Tại thư mục MiniSupermarket.API, chạy:
 dotnet ef migrations list
-```
-
-Nếu đã có migration trong dự án, cập nhật database bằng:
-
-```powershell
-dotnet ef database update
-```
-
-Không tạo lại `InitialCreate` hoặc xóa database đang sử dụng nếu không có yêu cầu reset rõ ràng. Khi cần thêm migration mới, hãy kiểm tra trạng thái schema và migration hiện có trước khi thực hiện.
-
-### Bước 4. Khởi chạy API
-
-Tại thư mục `MiniSupermarket.API`, chạy:
-
-```powershell
+Chỉ chạy dotnet ef database update khi đã xác minh migration và database đích. Không xóa database hoặc tạo lại migration khởi tạo khi không có yêu cầu rõ ràng.
+Bước 4. Kiểm tra Stored Procedure
+Trong SQL Server Management Studio, xác minh Stored Procedure checkout đã tồn tại và tham số khớp với cách gọi trong code. Nếu chưa có, hãy thiết kế dựa trên schema thực tế trước khi tạo.
+Bước 5. Khởi chạy API
 dotnet run
-```
+Chạy tại thư mục MiniSupermarket.API, kiểm tra URL thực tế trong Terminal và mở Swagger nếu đã cấu hình.
+Bước 6. Khởi chạy WinForms
+Mở solution trong Visual Studio, chọn MiniSupermarket.WinForms làm Startup Project và chạy. Đăng nhập bằng tài khoản hợp lệ đã được thiết lập từ Buổi 4.
+🧪 7. Kiểm thử Buổi 5
+Kiểm thử bằng dữ liệu thử nghiệm và đối chiếu phản hồi API với dữ liệu SQL Server.
+STT	Trường hợp kiểm thử	Kết quả mong đợi
+1	Quét mã vạch hợp lệ	Sản phẩm được tìm thấy và có thể thêm vào giỏ
+2	Quét mã vạch không tồn tại	Hiển thị thông báo phù hợp
+3	Thêm sản phẩm với số lượng hợp lệ	Giỏ hàng hiển thị số lượng và thành tiền đúng
+4	Gửi số lượng bằng 0 hoặc âm	API từ chối dữ liệu không hợp lệ
+5	Mua số lượng vượt tồn kho	Không hoàn tất đơn hàng và không trừ tồn kho
+6	Tiền khách đưa không đủ	Từ chối thanh toán nếu nghiệp vụ yêu cầu đủ tiền
+7	Checkout hợp lệ	Đơn hàng, chi tiết được lưu và tồn kho được cập nhật
+8	Lỗi phát sinh giữa checkout	Transaction rollback, dữ liệu không ở trạng thái dở dang
+9	Gọi endpoint được bảo vệ khi không có token	API từ chối yêu cầu
+10	Tải lại dữ liệu sau checkout	Đơn hàng và tồn kho phản ánh đúng kết quả
 
-Kiểm tra URL thực tế được in trong Terminal. Địa chỉ HTTPS có thể khác giữa các máy hoặc cấu hình chạy.
 
-### Bước 5. Khởi chạy WinForms
+7.1. Kiểm tra kết quả trong SQL Server
+Sau mỗi lần checkout, đối chiếu:
+- Đơn hàng mới trong bảng Orders.
+- Các dòng tương ứng trong OrderDetails.
+- Số lượng tồn kho của các sản phẩm liên quan.
+- Tổng tiền đơn hàng và các giá trị chi tiết.
+Tên bảng, tên cột và điều kiện truy vấn cần điều chỉnh theo schema thực tế.
+7.2. Kiểm tra an toàn dữ liệu
+- Không nối chuỗi đầu vào người dùng trực tiếp vào SQL.
+- Dùng SqlParameter cho dữ liệu truyền vào câu lệnh hoặc Stored Procedure.
+- Đảm bảo rollback khi checkout thất bại.
+- Không làm mất các chức năng JWT và phân quyền đã hoàn thành ở Buổi 4.
+📌 8. Kết quả và mục tiêu Buổi 5
+Các mục tiêu của Buổi 5 gồm:
+- Tiếp tục sử dụng kiến trúc Client - Server của project.
+- Giữ lại xác thực JWT và phân quyền từ Buổi 4.
+- Tìm hiểu và áp dụng ADO.NET trong xử lý dữ liệu phù hợp.
+- Sử dụng SqlConnection, SqlCommand và SqlParameter để làm việc với SQL Server.
+- Tìm hiểu cách gọi Stored Procedure từ C#.
+- Áp dụng SQL Transaction để bảo đảm tính nhất quán cho nghiệp vụ checkout.
+- Kiểm tra việc tạo đơn hàng, lưu chi tiết và cập nhật tồn kho.
+- Kiểm thử các tình huống thành công, dữ liệu không hợp lệ và lỗi giữa giao dịch.
+Đây là mục tiêu và tiêu chí kiểm thử. Chỉ ghi chức năng là hoàn thành sau khi đã triển khai và kiểm thử thành công trong project thực tế.
 
-Mở solution bằng Visual Studio, chọn `MiniSupermarket.WinForms` làm Startup Project và chạy ứng dụng.
-
-Nhập thông tin đăng nhập hợp lệ để kiểm tra giao diện chính và chức năng quản lý tài khoản.
-
----
-
-## 🧪 7. Kiểm thử API bằng Swagger UI
-
-### 7.1. Kiểm thử đăng nhập
-
-Gửi yêu cầu `POST /api/Auth/login` với dữ liệu JSON:
-
-```json
-{
-  "username": "admin01",
-  "password": "123456"
-}
-```
-
-Tên thuộc tính và định dạng dữ liệu cần khớp với DTO mà `AuthController` đang sử dụng.
-
-Nếu đăng nhập thành công, kiểm tra phản hồi có JWT Token và thông tin vai trò.
-
-### 7.2. Kiểm thử API quản lý tài khoản
-
-**GET `/api/Users`**
-
-Lấy danh sách tài khoản. Yêu cầu Token hợp lệ và quyền Admin.
-
-**POST `/api/Users`**
-
-Tạo tài khoản mới. Kiểm tra dữ liệu bắt buộc, vai trò và trường hợp tên đăng nhập bị trùng.
-
-Ví dụ dữ liệu gửi lên:
-
-```json
-{
-  "username": "cashier_test",
-  "password": "123456",
-  "fullName": "Nhan vien kiem thu",
-  "role": "Cashier"
-}
-```
-
-**PUT `/api/Users/{id}/reset-password`**
-
-Đặt lại mật khẩu cho tài khoản có ID tương ứng.
-
-Ví dụ Body:
-
-```json
-{
-  "newPassword": "123456"
-}
-```
-
-**PUT `/api/Users/{id}/toggle-lock`**
-
-Khóa hoặc mở khóa tài khoản được chọn. Kiểm tra trường `IsActive` sau khi thực hiện thao tác.
-
-### 7.3. Các trường hợp cần kiểm thử
-
-- Đăng nhập với tài khoản và mật khẩu đúng.
-- Đăng nhập với mật khẩu sai.
-- Gọi API quản lý tài khoản khi chưa có Token.
-- Gọi API quản lý tài khoản bằng tài khoản không có quyền Admin.
-- Thêm tài khoản hợp lệ.
-- Thêm tài khoản có tên đăng nhập bị trùng.
-- Đặt lại mật khẩu tài khoản.
-- Khóa và mở khóa tài khoản.
-- Kiểm tra giao diện WinForms cập nhật danh sách sau khi thao tác.
-
----
-
-## 📌 8. Kết quả đạt được (Buổi 4)
-
-- Xây dựng và tích hợp chức năng đăng nhập bằng JWT.
-- Bổ sung cơ chế băm và kiểm tra mật khẩu bằng `PasswordHasher<string>`.
-- Bổ sung model tài khoản người dùng và dữ liệu Data Seeding.
-- Triển khai API lấy danh sách, thêm tài khoản, đặt lại mật khẩu và khóa/mở khóa tài khoản.
-- Áp dụng phân quyền theo vai trò Admin, Cashier và Warehouse.
-- Tích hợp giao diện quản lý tài khoản vào ứng dụng Windows Forms.
-- Sử dụng `HttpClient` để kết nối WinForms với ASP.NET Core Web API.
-- Tiếp tục phát triển và quản lý mã nguồn trên nhánh Git `Buoi4`.
-
----
-
-## 📌 9. Quản lý phiên bản với Git
-
-Kiểm tra trạng thái mã nguồn:
-
-```powershell
+🌿 9. Quản lý phiên bản với Git
+Buổi 5 nên được phát triển trên nhánh riêng, kế thừa mã nguồn Buổi 4. Trước khi thao tác, kiểm tra trạng thái và nhánh hiện tại:
 git status
-```
-
-Thêm các tệp đã được kiểm tra vào Staging:
-
-```powershell
-git add <duong-dan-file>
-```
-
-Commit các thay đổi của buổi 4:
-
-```powershell
-git commit -m "Hoan thanh buoi 4 quan ly tai khoan"
-```
-
-Kiểm tra nhánh hiện tại:
-
-```powershell
 git branch --show-current
-```
+git branch -a
+Nếu các chỉnh sửa Buổi 4 vẫn chưa commit, cần giữ lại chúng và xác định đúng nhánh cơ sở trước khi tạo nhánh Buổi 5. Không dùng git reset --hard, git restore . hoặc lệnh xóa thay đổi khi chưa sao lưu.
 
-Đồng bộ lên GitHub:
+Sau khi đã tạo hoặc chuyển sang nhánh Buổi 5, kiểm tra các file thay đổi:
+git status
+git diff
+Chỉ stage các file liên quan và đã kiểm tra:
+git add <duong-dan-file>
+git commit -m "Hoan thanh buoi 5 ADO.NET va POS Checkout"
+git push -u origin Buoi5
+Chỉ chạy lệnh commit/push sau khi đã xác minh tên nhánh chính xác, các thay đổi đã được lưu và không có thông tin nhạy cảm. Nếu nhánh trên remote có tên khác, thay Buoi5 bằng tên nhánh thực tế.
 
-```powershell
-git push origin Buoi4
-```
-
-Trước khi commit, cần kiểm tra kỹ danh sách file thay đổi để tránh đưa nhầm cấu hình nhạy cảm, file không liên quan hoặc các thay đổi chưa hoàn thiện vào repository.
-
----
-
-## 👨‍💻 10. Thông tin sinh viên
-
-- **Họ tên sinh viên:** Nguyễn Minh Trọng
-- **Mã sinh viên:** 2124110253
-- **Lớp học phần:** CCQ2411D
-- **Môn học:** Lập trình Ứng dụng .NET Core
-- **Buổi thực hành:** Buổi 4
+👨‍💻 10. Thông tin sinh viên
+- Họ tên sinh viên: Nguyễn Minh Trọng
+- Mã sinh viên: 2124110253
+- Lớp học phần: CCQ2411D
+- Môn học: Lập trình Ứng dụng .NET Core
+- Buổi thực hành: Buổi 5
