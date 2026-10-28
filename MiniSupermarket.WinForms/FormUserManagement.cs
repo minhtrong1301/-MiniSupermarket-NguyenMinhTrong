@@ -9,6 +9,23 @@ namespace MiniSupermarket.WinForms
 {
     public partial class FormUserManagement : Form
     {
+        // Số tài khoản hiển thị trên mỗi trang.
+        private const int PageSize = 5;
+
+        // Trang hiện tại và tổng số trang.
+        private int _currentPage = 1;
+        private int _totalPages = 0;
+        private int _totalItems = 0;
+
+        // Từ khóa tìm kiếm hiện tại.
+        private string _currentKeyword = string.Empty;
+
+        private readonly JsonSerializerOptions _jsonOptions =
+            new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
         public FormUserManagement()
         {
             InitializeComponent();
@@ -23,33 +40,54 @@ namespace MiniSupermarket.WinForms
             });
 
             cboRole.SelectedIndex = 1;
+            UpdatePaginationControls();
         }
 
-        // Tự động tải danh sách tài khoản khi mở form.
+        // Tự động tải trang đầu tiên khi mở form.
         private async void FormUserManagement_Load(object sender, EventArgs e)
         {
+            _currentPage = 1;
             await LoadUsersAsync();
         }
 
-        // Lấy danh sách tài khoản từ API.
+        // Tải danh sách tài khoản theo trang và từ khóa tìm kiếm.
         private async Task LoadUsersAsync()
         {
             try
             {
+                string keyword = Uri.EscapeDataString(_currentKeyword);
+
+                string endpoint =
+                    $"users/paged?pageNumber={_currentPage}" +
+                    $"&pageSize={PageSize}&keyword={keyword}";
+
                 string json =
-                    await ApiClientService.GetDataWithTokenAsync("users");
+                    await ApiClientService.GetDataWithTokenAsync(endpoint);
 
-                var users = JsonSerializer.Deserialize<List<UserDto>>(
-                    json,
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
+                var result =
+                    JsonSerializer.Deserialize<PagedResultDto<UserDto>>(
+                        json, _jsonOptions);
 
+                if (result == null)
+                {
+                    MessageBox.Show(
+                        "API không trả về dữ liệu hợp lệ.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Cập nhật thông tin phân trang.
+                _currentPage = result.CurrentPage;
+                _totalPages = result.TotalPages;
+                _totalItems = result.TotalItems;
+
+                // Hiển thị danh sách tài khoản.
                 dgvUsers.DataSource = null;
-                dgvUsers.DataSource = users ?? new List<UserDto>();
+                dgvUsers.DataSource = result.Items ?? new List<UserDto>();
 
-                // Đổi tên tiêu đề các cột.
+                // Đổi tên tiêu đề cột.
                 if (dgvUsers.Columns["Id"] != null)
                     dgvUsers.Columns["Id"].HeaderText = "Mã ID";
 
@@ -63,7 +101,15 @@ namespace MiniSupermarket.WinForms
                     dgvUsers.Columns["Role"].HeaderText = "Vai trò";
 
                 if (dgvUsers.Columns["IsActive"] != null)
-                    dgvUsers.Columns["IsActive"].HeaderText = "Đang hoạt động";
+                {
+                    dgvUsers.Columns["IsActive"].HeaderText =
+                        "Đang hoạt động";
+
+                    dgvUsers.Columns["IsActive"].DefaultCellStyle.Alignment =
+                        DataGridViewContentAlignment.MiddleCenter;
+                }
+
+                UpdatePaginationControls();
             }
             catch (Exception ex)
             {
@@ -72,6 +118,77 @@ namespace MiniSupermarket.WinForms
                     "Lỗi",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+            }
+        }
+
+        // Cập nhật thông tin trang và trạng thái nút.
+        private void UpdatePaginationControls()
+        {
+            int displayedPage = _totalPages == 0 ? 0 : _currentPage;
+
+            lblPageInfo.Text =
+                $"Trang {displayedPage}/{_totalPages}";
+
+            lblTotalUsers.Text =
+                $"Tổng số tài khoản: {_totalItems}";
+
+            btnPrevious.Enabled =
+                _totalPages > 0 && _currentPage > 1;
+
+            btnNext.Enabled =
+                _totalPages > 0 && _currentPage < _totalPages;
+        }
+
+        // Chuyển về trang trước.
+        private async void btnPrevious_Click(object sender, EventArgs e)
+        {
+            if (_currentPage <= 1)
+                return;
+
+            _currentPage--;
+            await LoadUsersAsync();
+        }
+
+        // Chuyển sang trang tiếp theo.
+        private async void btnNext_Click(object sender, EventArgs e)
+        {
+            if (_currentPage >= _totalPages)
+                return;
+
+            _currentPage++;
+            await LoadUsersAsync();
+        }
+
+        // Tìm kiếm tài khoản.
+        private async void btnSearchUser_Click(object sender, EventArgs e)
+        {
+            _currentKeyword = txtSearchUser.Text.Trim();
+            _currentPage = 1;
+
+            await LoadUsersAsync();
+        }
+
+        // Xóa từ khóa tìm kiếm và tải lại danh sách.
+        private async void btnClearSearch_Click(object sender, EventArgs e)
+        {
+            txtSearchUser.Clear();
+            _currentKeyword = string.Empty;
+            _currentPage = 1;
+
+            await LoadUsersAsync();
+        }
+
+        // Nhấn Enter trong ô tìm kiếm để tìm.
+        private async void txtSearchUser_KeyDown(
+            object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                _currentKeyword = txtSearchUser.Text.Trim();
+                _currentPage = 1;
+
+                await LoadUsersAsync();
             }
         }
 
@@ -107,7 +224,8 @@ namespace MiniSupermarket.WinForms
                 };
 
                 var response =
-                    await ApiClientService.PostWithTokenAsync("users", newUser);
+                    await ApiClientService.PostWithTokenAsync(
+                        "users", newUser);
 
                 string responseBody =
                     await response.Content.ReadAsStringAsync();
@@ -120,12 +238,10 @@ namespace MiniSupermarket.WinForms
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
 
-                    // Xóa dữ liệu đã nhập.
-                    txtUsername.Clear();
-                    txtPassword.Clear();
-                    txtFullName.Clear();
-                    cboRole.SelectedIndex = 1;
+                    ClearInput();
 
+                    // Tài khoản mới có thể nằm ở trang đầu.
+                    _currentPage = 1;
                     await LoadUsersAsync();
                 }
                 else
@@ -148,7 +264,8 @@ namespace MiniSupermarket.WinForms
         }
 
         // Lấy tài khoản đang được chọn trên bảng.
-        private UserDto GetSelectedUser()
+        // Dấu ? cho phép hàm trả về null khi chưa chọn tài khoản.
+        private UserDto? GetSelectedUser()
         {
             if (dgvUsers.CurrentRow == null ||
                 dgvUsers.CurrentRow.DataBoundItem is not UserDto user)
@@ -168,7 +285,7 @@ namespace MiniSupermarket.WinForms
         // Đặt lại mật khẩu tài khoản được chọn về 123456.
         private async void btnResetPassword_Click(object sender, EventArgs e)
         {
-            UserDto selectedUser = GetSelectedUser();
+            UserDto? selectedUser = GetSelectedUser();
 
             if (selectedUser == null)
                 return;
@@ -220,17 +337,15 @@ namespace MiniSupermarket.WinForms
             }
         }
 
-        // Chuyển trạng thái khóa/mở khóa tài khoản.
+        // Khóa hoặc mở khóa tài khoản.
         private async void btnToggleLock_Click(object sender, EventArgs e)
         {
-            UserDto selectedUser = GetSelectedUser();
+            UserDto? selectedUser = GetSelectedUser();
 
             if (selectedUser == null)
                 return;
 
-            string action = selectedUser.IsActive
-                ? "khóa"
-                : "mở khóa";
+            string action = selectedUser.IsActive ? "khóa" : "mở khóa";
 
             DialogResult confirm = MessageBox.Show(
                 $"Bạn có chắc muốn {action} tài khoản " +
@@ -281,15 +396,14 @@ namespace MiniSupermarket.WinForms
             }
         }
 
-        // Sửa họ tên và vai trò của tài khoản được chọn.
+        // Cập nhật họ tên và vai trò tài khoản.
         private async void btnEditUser_Click(object sender, EventArgs e)
         {
-            UserDto selectedUser = GetSelectedUser();
+            UserDto? selectedUser = GetSelectedUser();
 
             if (selectedUser == null)
                 return;
 
-            // Hiển thị thông tin tài khoản lên các ô nhập.
             txtUsername.Text = selectedUser.Username;
             txtUsername.ReadOnly = true;
 
@@ -299,39 +413,32 @@ namespace MiniSupermarket.WinForms
             txtFullName.Text = selectedUser.FullName;
             cboRole.SelectedItem = selectedUser.Role;
 
-            // Xác nhận trước khi lưu thay đổi.
-            DialogResult confirm = MessageBox.Show(
-                $"Bạn có muốn cập nhật tài khoản {selectedUser.Username} không?",
-                "Xác nhận sửa tài khoản",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (confirm != DialogResult.Yes)
-            {
-                txtUsername.ReadOnly = false;
-                txtPassword.ReadOnly = false;
-                return;
-            }
-
-            string fullName = txtFullName.Text.Trim();
-            string role = cboRole.Text;
-
-            if (string.IsNullOrWhiteSpace(fullName) ||
-                string.IsNullOrWhiteSpace(role))
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập đầy đủ họ tên và vai trò!",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtUsername.ReadOnly = false;
-                txtPassword.ReadOnly = false;
-                return;
-            }
-
             try
             {
+                DialogResult confirm = MessageBox.Show(
+                    "Hãy chỉnh sửa họ tên và vai trò trong các ô nhập, " +
+                    $"sau đó chọn Yes để lưu tài khoản {selectedUser.Username}.",
+                    "Xác nhận cập nhật",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (confirm != DialogResult.Yes)
+                    return;
+
+                string fullName = txtFullName.Text.Trim();
+                string role = cboRole.Text;
+
+                if (string.IsNullOrWhiteSpace(fullName) ||
+                    string.IsNullOrWhiteSpace(role))
+                {
+                    MessageBox.Show(
+                        "Vui lòng nhập đầy đủ họ tên và vai trò!",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
                 var updatedUser = new
                 {
                     FullName = fullName,
@@ -340,8 +447,7 @@ namespace MiniSupermarket.WinForms
 
                 var response =
                     await ApiClientService.PutWithTokenAsync(
-                        $"users/{selectedUser.Id}",
-                        updatedUser);
+                        $"users/{selectedUser.Id}", updatedUser);
 
                 string responseBody =
                     await response.Content.ReadAsStringAsync();
@@ -354,13 +460,8 @@ namespace MiniSupermarket.WinForms
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
 
+                    ClearInput();
                     await LoadUsersAsync();
-
-                    // Đưa các ô nhập về trạng thái bình thường.
-                    txtUsername.Clear();
-                    txtPassword.Clear();
-                    txtFullName.Clear();
-                    cboRole.SelectedIndex = 1;
                 }
                 else
                 {
@@ -386,7 +487,7 @@ namespace MiniSupermarket.WinForms
             }
         }
 
-        // Hiển thị thông tin tài khoản khi chọn một dòng trong bảng.
+        // Hiển thị thông tin tài khoản được chọn.
         private void dgvUsers_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvUsers.CurrentRow == null ||
@@ -395,23 +496,38 @@ namespace MiniSupermarket.WinForms
                 return;
             }
 
-            // Hiển thị thông tin tài khoản lên các ô nhập.
             txtUsername.Text = user.Username;
             txtFullName.Text = user.FullName;
 
             if (cboRole.Items.Contains(user.Role))
-            {
                 cboRole.SelectedItem = user.Role;
-            }
 
             // Không hiển thị mật khẩu cũ.
             txtPassword.Clear();
         }
 
+        // Xóa các ô nhập sau khi thao tác thành công.
+        private void ClearInput()
+        {
+            txtUsername.Clear();
+            txtPassword.Clear();
+            txtFullName.Clear();
 
+            txtUsername.ReadOnly = false;
+            txtPassword.ReadOnly = false;
+
+            if (cboRole.Items.Count > 1)
+                cboRole.SelectedIndex = 1;
+        }
+
+        private void panelInputs_Paint(object sender, PaintEventArgs e)
+        {
+            // Giữ lại sự kiện Paint của Designer.
+        }
     }
 
-    // DTO nhận dữ liệu danh sách tài khoản từ API.
+    // DTO tài khoản dùng để nhận dữ liệu từ API.
+    // Chỉ giữ một định nghĩa UserDto trong namespace này.
     public class UserDto
     {
         public int Id { get; set; }

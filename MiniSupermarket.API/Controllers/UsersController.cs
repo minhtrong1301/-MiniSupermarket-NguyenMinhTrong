@@ -203,6 +203,92 @@ namespace MiniSupermarket.API.Controllers
             });
         }
 
+        // GET: /api/users/paged?pageNumber=1&pageSize=5&keyword=admin
+        // Phân trang và tìm kiếm tài khoản theo tên đăng nhập, họ tên hoặc vai trò.
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPaged(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 5,
+            [FromQuery] string? keyword = null)
+        {
+            // Kiểm tra tham số phân trang.
+            if (pageNumber < 1 || pageSize < 1)
+            {
+                return BadRequest(new
+                {
+                    message = "Số trang và kích thước trang phải lớn hơn 0!"
+                });
+            }
+
+            // Giới hạn số tài khoản mỗi trang.
+            if (pageSize > 100)
+            {
+                return BadRequest(new
+                {
+                    message = "Kích thước trang không được vượt quá 100!"
+                });
+            }
+
+            // Không tải PasswordHash ra khỏi database.
+            var query = _context.Users.AsNoTracking();
+
+            // Tìm kiếm nếu người dùng nhập từ khóa.
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                keyword = keyword.Trim();
+
+                query = query.Where(u =>
+                    u.Username.Contains(keyword) ||
+                    u.FullName.Contains(keyword) ||
+                    u.Role.Contains(keyword));
+            }
+
+            // Sắp xếp ổn định theo ID.
+            query = query.OrderBy(u => u.Id);
+
+            // Đếm số tài khoản sau khi tìm kiếm.
+            int totalItems = await query.CountAsync();
+
+            // Tính tổng số trang.
+            int totalPages = (int)Math.Ceiling(
+                totalItems / (double)pageSize);
+
+            // Đưa trang về phạm vi hợp lệ.
+            if (totalPages == 0)
+            {
+                pageNumber = 1;
+            }
+            else if (pageNumber > totalPages)
+            {
+                pageNumber = totalPages;
+            }
+
+            // Chỉ lấy dữ liệu của trang hiện tại.
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(u => new
+                {
+                    u.Id,
+                    u.Username,
+                    u.FullName,
+                    u.Role,
+                    u.IsActive
+                })
+                .ToListAsync();
+
+            // Trả về danh sách cùng thông tin phân trang.
+            return Ok(new
+            {
+                currentPage = pageNumber,
+                pageSize,
+                totalItems,
+                totalPages,
+                items
+            });
+        }
+
+
     }
 
     // Dữ liệu nhận khi tạo tài khoản.

@@ -1,4 +1,5 @@
-﻿namespace MiniSupermarket.WinForms
+﻿
+namespace MiniSupermarket.WinForms
 {
     partial class FormProductManagement
     {
@@ -10,6 +11,7 @@
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -17,364 +19,438 @@
 
         private void InitializeComponent()
         {
-            this.pnlTopSearch = new System.Windows.Forms.Panel();
-            this.lblSearchBarcode = new System.Windows.Forms.Label();
-            this.txtSearchBarcode = new System.Windows.Forms.TextBox();
-            this.lblFilterCategory = new System.Windows.Forms.Label();
-            this.cboFilterCategory = new System.Windows.Forms.ComboBox();
-            this.btnSearch = new System.Windows.Forms.Button();
-            this.pnlCenterLeft = new System.Windows.Forms.Panel();
-            this.dgvProducts = new System.Windows.Forms.DataGridView();
-            this.pnlRightDetail = new System.Windows.Forms.Panel();
-            this.lblDetailTitle = new System.Windows.Forms.Label();
-            this.lblId = new System.Windows.Forms.Label();
-            this.txtId = new System.Windows.Forms.TextBox();
-            this.lblBarcode = new System.Windows.Forms.Label();
-            this.txtBarcode = new System.Windows.Forms.TextBox();
-            this.lblProductName = new System.Windows.Forms.Label();
-            this.txtProductName = new System.Windows.Forms.TextBox();
-            this.lblPrice = new System.Windows.Forms.Label();
-            this.nudPrice = new System.Windows.Forms.NumericUpDown();
-            this.lblStock = new System.Windows.Forms.Label();
-            this.nudStock = new System.Windows.Forms.NumericUpDown();
-            this.lblCategory = new System.Windows.Forms.Label();
-            this.cboCategory = new System.Windows.Forms.ComboBox();
-            this.btnLoad = new System.Windows.Forms.Button();
-            this.btnAdd = new System.Windows.Forms.Button();
-            this.btnUpdate = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
+            pnlTopSearch = new Panel();
+            lblSearchBarcode = new Label();
+            txtSearchBarcode = new TextBox();
+            lblFilterCategory = new Label();
+            cboFilterCategory = new ComboBox();
+            btnSearch = new Button();
 
-            this.pnlTopSearch.SuspendLayout();
-            this.pnlCenterLeft.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).BeginInit();
-            this.pnlRightDetail.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPrice)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStock)).BeginInit();
-            this.SuspendLayout();
+            pnlCenterLeft = new Panel();
+            dgvProducts = new DataGridView();
+
+            pnlPagination = new Panel();
+            btnPreviousPage = new Button();
+            lblPageInfo = new Label();
+            btnNextPage = new Button();
+
+            pnlRightDetail = new Panel();
+            lblDetailTitle = new Label();
+            lblId = new Label();
+            txtId = new TextBox();
+            lblBarcode = new Label();
+            txtBarcode = new TextBox();
+            lblProductName = new Label();
+            txtProductName = new TextBox();
+            lblCategory = new Label();
+            cboCategory = new ComboBox();
+            lblPrice = new Label();
+            nudPrice = new NumericUpDown();
+            lblStock = new Label();
+            nudStock = new NumericUpDown();
+
+            btnLoad = new Button();
+            btnAdd = new Button();
+            btnUpdate = new Button();
+            btnDelete = new Button();
+
+            pnlTopSearch.SuspendLayout();
+            pnlCenterLeft.SuspendLayout();
+            pnlPagination.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvProducts).BeginInit();
+            pnlRightDetail.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudPrice).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nudStock).BeginInit();
+            SuspendLayout();
 
             // 
-            // pnlTopSearch (Thanh tìm kiếm & lọc phía trên)
+            // pnlTopSearch
             // 
-            this.pnlTopSearch.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.pnlTopSearch.Controls.Add(this.lblSearchBarcode);
-            this.pnlTopSearch.Controls.Add(this.txtSearchBarcode);
-            this.pnlTopSearch.Controls.Add(this.lblFilterCategory);
-            this.pnlTopSearch.Controls.Add(this.cboFilterCategory);
-            this.pnlTopSearch.Controls.Add(this.btnSearch);
-            this.pnlTopSearch.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTopSearch.Location = new System.Drawing.Point(0, 0);
-            this.pnlTopSearch.Name = "pnlTopSearch";
-            this.pnlTopSearch.Size = new System.Drawing.Size(980, 50);
-            this.pnlTopSearch.TabIndex = 0;
+            pnlTopSearch.BackColor = Color.WhiteSmoke;
+            pnlTopSearch.Controls.Add(lblSearchBarcode);
+            pnlTopSearch.Controls.Add(txtSearchBarcode);
+            pnlTopSearch.Controls.Add(lblFilterCategory);
+            pnlTopSearch.Controls.Add(cboFilterCategory);
+            pnlTopSearch.Controls.Add(btnSearch);
+            pnlTopSearch.Dock = DockStyle.Top;
+            pnlTopSearch.Location = new Point(0, 0);
+            pnlTopSearch.Name = "pnlTopSearch";
+            pnlTopSearch.Padding = new Padding(12, 10, 12, 10);
+            pnlTopSearch.Size = new Size(1120, 67);
+            pnlTopSearch.TabIndex = 0;
 
             // 
             // lblSearchBarcode
             // 
-            this.lblSearchBarcode.AutoSize = true;
-            this.lblSearchBarcode.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblSearchBarcode.Location = new System.Drawing.Point(12, 18);
-            this.lblSearchBarcode.Name = "lblSearchBarcode";
-            this.lblSearchBarcode.Size = new System.Drawing.Size(81, 15);
-            this.lblSearchBarcode.Text = "Tìm mã vạch:";
+            lblSearchBarcode.AutoSize = true;
+            lblSearchBarcode.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblSearchBarcode.Location = new Point(14, 24);
+            lblSearchBarcode.Name = "lblSearchBarcode";
+            lblSearchBarcode.Size = new Size(102, 20);
+            lblSearchBarcode.TabIndex = 0;
+            lblSearchBarcode.Text = "Tìm mã vạch:";
 
             // 
             // txtSearchBarcode
             // 
-            this.txtSearchBarcode.Location = new System.Drawing.Point(95, 14);
-            this.txtSearchBarcode.Name = "txtSearchBarcode";
-            this.txtSearchBarcode.Size = new System.Drawing.Size(180, 23);
-            this.txtSearchBarcode.TabIndex = 1;
+            txtSearchBarcode.Location = new Point(120, 19);
+            txtSearchBarcode.Name = "txtSearchBarcode";
+            txtSearchBarcode.Size = new Size(205, 27);
+            txtSearchBarcode.TabIndex = 1;
 
             // 
             // lblFilterCategory
             // 
-            this.lblFilterCategory.AutoSize = true;
-            this.lblFilterCategory.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblFilterCategory.Location = new System.Drawing.Point(300, 18);
-            this.lblFilterCategory.Name = "lblFilterCategory";
-            this.lblFilterCategory.Size = new System.Drawing.Size(66, 15);
-            this.lblFilterCategory.Text = "Danh mục:";
+            lblFilterCategory.AutoSize = true;
+            lblFilterCategory.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblFilterCategory.Location = new Point(343, 24);
+            lblFilterCategory.Name = "lblFilterCategory";
+            lblFilterCategory.Size = new Size(84, 20);
+            lblFilterCategory.TabIndex = 2;
+            lblFilterCategory.Text = "Danh mục:";
 
             // 
             // cboFilterCategory
             // 
-            this.cboFilterCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboFilterCategory.FormattingEnabled = true;
-            this.cboFilterCategory.Location = new System.Drawing.Point(372, 14);
-            this.cboFilterCategory.Name = "cboFilterCategory";
-            this.cboFilterCategory.Size = new System.Drawing.Size(200, 23);
-            this.cboFilterCategory.TabIndex = 2;
+            cboFilterCategory.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboFilterCategory.FormattingEnabled = true;
+            cboFilterCategory.Location = new Point(430, 19);
+            cboFilterCategory.Name = "cboFilterCategory";
+            cboFilterCategory.Size = new Size(228, 28);
+            cboFilterCategory.TabIndex = 2;
 
             // 
             // btnSearch
             // 
-            this.btnSearch.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnSearch.ForeColor = System.Drawing.Color.White;
-            this.btnSearch.Location = new System.Drawing.Point(590, 11);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(90, 28);
-            this.btnSearch.TabIndex = 3;
-            this.btnSearch.Text = "Tìm kiếm";
-            this.btnSearch.UseVisualStyleBackColor = false;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            btnSearch.BackColor = Color.DodgerBlue;
+            btnSearch.FlatStyle = FlatStyle.Flat;
+            btnSearch.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnSearch.ForeColor = Color.White;
+            btnSearch.Location = new Point(674, 15);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(103, 37);
+            btnSearch.TabIndex = 3;
+            btnSearch.Text = "Tìm kiếm";
+            btnSearch.UseVisualStyleBackColor = false;
+            btnSearch.Click += btnSearch_Click;
 
             // 
-            // pnlCenterLeft (Khu vực danh sách 68% bên trái)
+            // pnlCenterLeft
             // 
-            this.pnlCenterLeft.Controls.Add(this.dgvProducts);
-            this.pnlCenterLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlCenterLeft.Location = new System.Drawing.Point(0, 50);
-            this.pnlCenterLeft.Name = "pnlCenterLeft";
-            this.pnlCenterLeft.Padding = new System.Windows.Forms.Padding(10);
-            this.pnlCenterLeft.Size = new System.Drawing.Size(666, 520);
-            this.pnlCenterLeft.TabIndex = 1;
+            pnlCenterLeft.BackColor = Color.White;
+            pnlCenterLeft.Controls.Add(dgvProducts);
+            pnlCenterLeft.Controls.Add(pnlPagination);
+            pnlCenterLeft.Dock = DockStyle.Fill;
+            pnlCenterLeft.Location = new Point(0, 67);
+            pnlCenterLeft.Name = "pnlCenterLeft";
+            pnlCenterLeft.Padding = new Padding(12);
+            pnlCenterLeft.TabIndex = 1;
 
             // 
             // dgvProducts
             // 
-            this.dgvProducts.AllowUserToAddRows = false;
-            this.dgvProducts.AllowUserToDeleteRows = false;
-            this.dgvProducts.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvProducts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvProducts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvProducts.Location = new System.Drawing.Point(10, 10);
-            this.dgvProducts.Name = "dgvProducts";
-            this.dgvProducts.ReadOnly = true;
-            this.dgvProducts.RowHeadersVisible = false;
-            this.dgvProducts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvProducts.Size = new System.Drawing.Size(646, 500);
-            this.dgvProducts.TabIndex = 0;
-            this.dgvProducts.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProducts_CellClick);
+            dgvProducts.AllowUserToAddRows = false;
+            dgvProducts.AllowUserToDeleteRows = false;
+            dgvProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvProducts.BackgroundColor = Color.White;
+            dgvProducts.BorderStyle = BorderStyle.FixedSingle;
+            dgvProducts.ColumnHeadersHeightSizeMode =
+                DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvProducts.Dock = DockStyle.Fill;
+            dgvProducts.Margin = new Padding(0);
+            dgvProducts.Name = "dgvProducts";
+            dgvProducts.ReadOnly = true;
+            dgvProducts.RowHeadersVisible = false;
+            dgvProducts.RowHeadersWidth = 51;
+            dgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvProducts.MultiSelect = false;
+            dgvProducts.TabIndex = 0;
+            dgvProducts.CellClick += dgvProducts_CellClick;
+            dgvProducts.CellContentClick += dgvProducts_CellContentClick;
 
             // 
-            // pnlRightDetail (Khu vực chi tiết 32% bên phải)
+            // pnlPagination
             // 
-            this.pnlRightDetail.BackColor = System.Drawing.Color.White;
-            this.pnlRightDetail.Controls.Add(this.lblDetailTitle);
-            this.pnlRightDetail.Controls.Add(this.lblId);
-            this.pnlRightDetail.Controls.Add(this.txtId);
-            this.pnlRightDetail.Controls.Add(this.lblBarcode);
-            this.pnlRightDetail.Controls.Add(this.txtBarcode);
-            this.pnlRightDetail.Controls.Add(this.lblProductName);
-            this.pnlRightDetail.Controls.Add(this.txtProductName);
-            this.pnlRightDetail.Controls.Add(this.lblPrice);
-            this.pnlRightDetail.Controls.Add(this.nudPrice);
-            this.pnlRightDetail.Controls.Add(this.lblStock);
-            this.pnlRightDetail.Controls.Add(this.nudStock);
-            this.pnlRightDetail.Controls.Add(this.lblCategory);
-            this.pnlRightDetail.Controls.Add(this.cboCategory);
-            this.pnlRightDetail.Controls.Add(this.btnLoad);
-            this.pnlRightDetail.Controls.Add(this.btnAdd);
-            this.pnlRightDetail.Controls.Add(this.btnUpdate);
-            this.pnlRightDetail.Controls.Add(this.btnDelete);
-            this.pnlRightDetail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlRightDetail.Location = new System.Drawing.Point(666, 50);
-            this.pnlRightDetail.Name = "pnlRightDetail";
-            this.pnlRightDetail.Padding = new System.Windows.Forms.Padding(15);
-            this.pnlRightDetail.Size = new System.Drawing.Size(314, 520);
-            this.pnlRightDetail.TabIndex = 2;
+            pnlPagination.BackColor = Color.WhiteSmoke;
+            pnlPagination.Controls.Add(btnPreviousPage);
+            pnlPagination.Controls.Add(lblPageInfo);
+            pnlPagination.Controls.Add(btnNextPage);
+            pnlPagination.Dock = DockStyle.Bottom;
+            pnlPagination.Height = 55;
+            pnlPagination.Name = "pnlPagination";
+            pnlPagination.TabIndex = 1;
+
+            // 
+            // btnPreviousPage
+            // 
+            btnPreviousPage.Anchor = AnchorStyles.Top;
+            btnPreviousPage.Location = new Point(150, 10);
+            btnPreviousPage.Name = "btnPreviousPage";
+            btnPreviousPage.Size = new Size(120, 35);
+            btnPreviousPage.TabIndex = 0;
+            btnPreviousPage.Text = "Trang trước";
+            btnPreviousPage.Click += btnPreviousPage_Click;
+            btnPreviousPage.UseVisualStyleBackColor = true;
+
+            // 
+            // lblPageInfo
+            // 
+            lblPageInfo.Anchor = AnchorStyles.Top;
+            lblPageInfo.Location = new Point(285, 10);
+            lblPageInfo.Name = "lblPageInfo";
+            lblPageInfo.Size = new Size(160, 35);
+            lblPageInfo.TabIndex = 1;
+            lblPageInfo.Text = "Trang 1 / 1";
+            lblPageInfo.TextAlign = ContentAlignment.MiddleCenter;
+
+            // 
+            // btnNextPage
+            // 
+            btnNextPage.Anchor = AnchorStyles.Top;
+            btnNextPage.Location = new Point(460, 10);
+            btnNextPage.Name = "btnNextPage";
+            btnNextPage.Size = new Size(120, 35);
+            btnNextPage.TabIndex = 2;
+            btnNextPage.Text = "Trang sau";
+            btnNextPage.Click += btnNextPage_Click;
+            btnNextPage.UseVisualStyleBackColor = true;
+
+            // 
+            // pnlRightDetail
+            // 
+            pnlRightDetail.BackColor = Color.White;
+            pnlRightDetail.Controls.Add(lblDetailTitle);
+            pnlRightDetail.Controls.Add(lblId);
+            pnlRightDetail.Controls.Add(txtId);
+            pnlRightDetail.Controls.Add(lblBarcode);
+            pnlRightDetail.Controls.Add(txtBarcode);
+            pnlRightDetail.Controls.Add(lblProductName);
+            pnlRightDetail.Controls.Add(txtProductName);
+            pnlRightDetail.Controls.Add(lblCategory);
+            pnlRightDetail.Controls.Add(cboCategory);
+            pnlRightDetail.Controls.Add(lblPrice);
+            pnlRightDetail.Controls.Add(nudPrice);
+            pnlRightDetail.Controls.Add(lblStock);
+            pnlRightDetail.Controls.Add(nudStock);
+            pnlRightDetail.Controls.Add(btnLoad);
+            pnlRightDetail.Controls.Add(btnAdd);
+            pnlRightDetail.Controls.Add(btnUpdate);
+            pnlRightDetail.Controls.Add(btnDelete);
+            pnlRightDetail.Dock = DockStyle.Right;
+            pnlRightDetail.Name = "pnlRightDetail";
+            pnlRightDetail.Padding = new Padding(17, 20, 17, 20);
+            pnlRightDetail.Size = new Size(359, 693);
+            pnlRightDetail.TabIndex = 2;
 
             // 
             // lblDetailTitle
             // 
-            this.lblDetailTitle.AutoSize = true;
-            this.lblDetailTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.lblDetailTitle.ForeColor = System.Drawing.Color.Navy;
-            this.lblDetailTitle.Location = new System.Drawing.Point(15, 10);
-            this.lblDetailTitle.Name = "lblDetailTitle";
-            this.lblDetailTitle.Size = new System.Drawing.Size(183, 21);
-            this.lblDetailTitle.TabIndex = 0;
-            this.lblDetailTitle.Text = "THÔNG TIN SẢN PHẨM";
+            lblDetailTitle.AutoSize = true;
+            lblDetailTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblDetailTitle.ForeColor = Color.Navy;
+            lblDetailTitle.Location = new Point(17, 13);
+            lblDetailTitle.Name = "lblDetailTitle";
+            lblDetailTitle.Size = new Size(237, 28);
+            lblDetailTitle.TabIndex = 0;
+            lblDetailTitle.Text = "THÔNG TIN SẢN PHẨM";
 
             // 
             // lblId
             // 
-            this.lblId.AutoSize = true;
-            this.lblId.Location = new System.Drawing.Point(15, 45);
-            this.lblId.Name = "lblId";
-            this.lblId.Size = new System.Drawing.Size(43, 15);
-            this.lblId.Text = "Mã SP:";
+            lblId.AutoSize = true;
+            lblId.Location = new Point(17, 60);
+            lblId.Name = "lblId";
+            lblId.Size = new Size(53, 20);
+            lblId.TabIndex = 1;
+            lblId.Text = "Mã SP:";
 
             // 
             // txtId
             // 
-            this.txtId.Location = new System.Drawing.Point(15, 63);
-            this.txtId.Name = "txtId";
-            this.txtId.ReadOnly = true;
-            this.txtId.Size = new System.Drawing.Size(280, 23);
-            this.txtId.TabIndex = 1;
+            txtId.Location = new Point(17, 84);
+            txtId.Name = "txtId";
+            txtId.ReadOnly = true;
+            txtId.Size = new Size(319, 27);
+            txtId.TabIndex = 1;
 
             // 
             // lblBarcode
             // 
-            this.lblBarcode.AutoSize = true;
-            this.lblBarcode.Location = new System.Drawing.Point(15, 95);
-            this.lblBarcode.Name = "lblBarcode";
-            this.lblBarcode.Size = new System.Drawing.Size(55, 15);
-            this.lblBarcode.Text = "Mã vạch:";
+            lblBarcode.AutoSize = true;
+            lblBarcode.Location = new Point(17, 127);
+            lblBarcode.Name = "lblBarcode";
+            lblBarcode.Size = new Size(67, 20);
+            lblBarcode.TabIndex = 2;
+            lblBarcode.Text = "Mã vạch:";
 
             // 
             // txtBarcode
             // 
-            this.txtBarcode.Location = new System.Drawing.Point(15, 113);
-            this.txtBarcode.Name = "txtBarcode";
-            this.txtBarcode.Size = new System.Drawing.Size(280, 23);
-            this.txtBarcode.TabIndex = 2;
+            txtBarcode.Location = new Point(17, 151);
+            txtBarcode.Name = "txtBarcode";
+            txtBarcode.Size = new Size(319, 27);
+            txtBarcode.TabIndex = 2;
 
             // 
             // lblProductName
             // 
-            this.lblProductName.AutoSize = true;
-            this.lblProductName.Location = new System.Drawing.Point(15, 145);
-            this.lblProductName.Name = "lblProductName";
-            this.lblProductName.Size = new System.Drawing.Size(83, 15);
-            this.lblProductName.Text = "Tên sản phẩm:";
+            lblProductName.AutoSize = true;
+            lblProductName.Location = new Point(17, 193);
+            lblProductName.Name = "lblProductName";
+            lblProductName.Size = new Size(103, 20);
+            lblProductName.TabIndex = 3;
+            lblProductName.Text = "Tên sản phẩm:";
 
             // 
             // txtProductName
             // 
-            this.txtProductName.Location = new System.Drawing.Point(15, 163);
-            this.txtProductName.Name = "txtProductName";
-            this.txtProductName.Size = new System.Drawing.Size(280, 23);
-            this.txtProductName.TabIndex = 3;
+            txtProductName.Location = new Point(17, 217);
+            txtProductName.Name = "txtProductName";
+            txtProductName.Size = new Size(319, 27);
+            txtProductName.TabIndex = 3;
 
             // 
             // lblCategory
             // 
-            this.lblCategory.AutoSize = true;
-            this.lblCategory.Location = new System.Drawing.Point(15, 195);
-            this.lblCategory.Name = "lblCategory";
-            this.lblCategory.Size = new System.Drawing.Size(65, 15);
-            this.lblCategory.Text = "Danh mục:";
+            lblCategory.AutoSize = true;
+            lblCategory.Location = new Point(17, 260);
+            lblCategory.Name = "lblCategory";
+            lblCategory.Size = new Size(79, 20);
+            lblCategory.TabIndex = 4;
+            lblCategory.Text = "Danh mục:";
 
             // 
             // cboCategory
             // 
-            this.cboCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboCategory.FormattingEnabled = true;
-            this.cboCategory.Location = new System.Drawing.Point(15, 213);
-            this.cboCategory.Name = "cboCategory";
-            this.cboCategory.Size = new System.Drawing.Size(280, 23);
-            this.cboCategory.TabIndex = 4;
+            cboCategory.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboCategory.FormattingEnabled = true;
+            cboCategory.Location = new Point(17, 284);
+            cboCategory.Name = "cboCategory";
+            cboCategory.Size = new Size(319, 28);
+            cboCategory.TabIndex = 5;
 
             // 
             // lblPrice
             // 
-            this.lblPrice.AutoSize = true;
-            this.lblPrice.Location = new System.Drawing.Point(15, 245);
-            this.lblPrice.Name = "lblPrice";
-            this.lblPrice.Size = new System.Drawing.Size(51, 15);
-            this.lblPrice.Text = "Đơn giá:";
+            lblPrice.AutoSize = true;
+            lblPrice.Location = new Point(17, 327);
+            lblPrice.Name = "lblPrice";
+            lblPrice.Size = new Size(65, 20);
+            lblPrice.TabIndex = 6;
+            lblPrice.Text = "Đơn giá:";
 
             // 
             // nudPrice
             // 
-            this.nudPrice.DecimalPlaces = 0;
-            this.nudPrice.Location = new System.Drawing.Point(15, 263);
-            this.nudPrice.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
-            this.nudPrice.Name = "nudPrice";
-            this.nudPrice.Size = new System.Drawing.Size(280, 23);
-            this.nudPrice.TabIndex = 5;
-            this.nudPrice.ThousandsSeparator = true;
+            nudPrice.Location = new Point(17, 351);
+            nudPrice.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nudPrice.Name = "nudPrice";
+            nudPrice.Size = new Size(320, 27);
+            nudPrice.TabIndex = 7;
+            nudPrice.ThousandsSeparator = true;
 
             // 
             // lblStock
             // 
-            this.lblStock.AutoSize = true;
-            this.lblStock.Location = new System.Drawing.Point(15, 295);
-            this.lblStock.Name = "lblStock";
-            this.lblStock.Size = new System.Drawing.Size(53, 15);
-            this.lblStock.Text = "Tồn kho:";
+            lblStock.AutoSize = true;
+            lblStock.Location = new Point(17, 393);
+            lblStock.Name = "lblStock";
+            lblStock.Size = new Size(65, 20);
+            lblStock.TabIndex = 8;
+            lblStock.Text = "Tồn kho:";
 
             // 
             // nudStock
             // 
-            this.nudStock.Location = new System.Drawing.Point(15, 313);
-            this.nudStock.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
-            this.nudStock.Name = "nudStock";
-            this.nudStock.Size = new System.Drawing.Size(280, 23);
-            this.nudStock.TabIndex = 6;
+            nudStock.Location = new Point(17, 417);
+            nudStock.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            nudStock.Name = "nudStock";
+            nudStock.Size = new Size(320, 27);
+            nudStock.TabIndex = 9;
 
             // 
             // btnLoad
             // 
-            this.btnLoad.Location = new System.Drawing.Point(15, 360);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(130, 35);
-            this.btnLoad.TabIndex = 7;
-            this.btnLoad.Text = "Làm mới";
-            this.btnLoad.UseVisualStyleBackColor = true;
-            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+            btnLoad.Location = new Point(17, 480);
+            btnLoad.Name = "btnLoad";
+            btnLoad.Size = new Size(149, 47);
+            btnLoad.TabIndex = 10;
+            btnLoad.Text = "Làm mới";
+            btnLoad.UseVisualStyleBackColor = true;
+            btnLoad.Click += btnLoad_Click;
 
             // 
             // btnAdd
             // 
-            this.btnAdd.BackColor = System.Drawing.Color.ForestGreen;
-            this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAdd.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnAdd.ForeColor = System.Drawing.Color.White;
-            this.btnAdd.Location = new System.Drawing.Point(165, 360);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(130, 35);
-            this.btnAdd.TabIndex = 8;
-            this.btnAdd.Text = "Thêm mới";
-            this.btnAdd.UseVisualStyleBackColor = false;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            btnAdd.BackColor = Color.ForestGreen;
+            btnAdd.FlatStyle = FlatStyle.Flat;
+            btnAdd.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnAdd.ForeColor = Color.White;
+            btnAdd.Location = new Point(189, 480);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new Size(149, 47);
+            btnAdd.TabIndex = 11;
+            btnAdd.Text = "Thêm mới";
+            btnAdd.UseVisualStyleBackColor = false;
+            btnAdd.Click += btnAdd_Click;
 
             // 
             // btnUpdate
             // 
-            this.btnUpdate.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUpdate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnUpdate.ForeColor = System.Drawing.Color.White;
-            this.btnUpdate.Location = new System.Drawing.Point(15, 410);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(130, 35);
-            this.btnUpdate.TabIndex = 9;
-            this.btnUpdate.Text = "Cập nhật";
-            this.btnUpdate.UseVisualStyleBackColor = false;
-            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            btnUpdate.BackColor = Color.DodgerBlue;
+            btnUpdate.FlatStyle = FlatStyle.Flat;
+            btnUpdate.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnUpdate.ForeColor = Color.White;
+            btnUpdate.Location = new Point(17, 547);
+            btnUpdate.Name = "btnUpdate";
+            btnUpdate.Size = new Size(149, 47);
+            btnUpdate.TabIndex = 12;
+            btnUpdate.Text = "Cập nhật";
+            btnUpdate.UseVisualStyleBackColor = false;
+            btnUpdate.Click += btnUpdate_Click;
 
             // 
             // btnDelete
             // 
-            this.btnDelete.BackColor = System.Drawing.Color.Crimson;
-            this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDelete.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnDelete.ForeColor = System.Drawing.Color.White;
-            this.btnDelete.Location = new System.Drawing.Point(165, 410);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(130, 35);
-            this.btnDelete.TabIndex = 10;
-            this.btnDelete.Text = "Xóa";
-            this.btnDelete.UseVisualStyleBackColor = false;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            btnDelete.BackColor = Color.Crimson;
+            btnDelete.FlatStyle = FlatStyle.Flat;
+            btnDelete.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnDelete.ForeColor = Color.White;
+            btnDelete.Location = new Point(189, 547);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(149, 47);
+            btnDelete.TabIndex = 13;
+            btnDelete.Text = "Xóa";
+            btnDelete.UseVisualStyleBackColor = false;
+            btnDelete.Click += btnDelete_Click;
 
             // 
             // FormProductManagement
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(980, 570);
-            this.Controls.Add(this.pnlRightDetail);
-            this.Controls.Add(this.pnlCenterLeft);
-            this.Controls.Add(this.pnlTopSearch);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Name = "FormProductManagement";
-            this.Text = "Quản lý Sản phẩm & Kho hàng";
-            this.Load += new System.EventHandler(this.FormProductManagement_Load);
-            this.pnlTopSearch.ResumeLayout(false);
-            this.pnlTopSearch.PerformLayout();
-            this.pnlCenterLeft.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).EndInit();
-            this.pnlRightDetail.ResumeLayout(false);
-            this.pnlRightDetail.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPrice)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStock)).EndInit();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1120, 760);
+            MinimumSize = new Size(950, 650);
+            Controls.Add(pnlCenterLeft);
+            Controls.Add(pnlRightDetail);
+            Controls.Add(pnlTopSearch);
+            Font = new Font("Segoe UI", 9F);
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "FormProductManagement";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Quản lý Sản phẩm & Kho hàng";
+            Load += FormProductManagement_Load;
+
+            pnlTopSearch.ResumeLayout(false);
+            pnlTopSearch.PerformLayout();
+            pnlCenterLeft.ResumeLayout(false);
+            pnlPagination.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvProducts).EndInit();
+            pnlRightDetail.ResumeLayout(false);
+            pnlRightDetail.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudPrice).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nudStock).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -388,6 +464,10 @@
 
         private System.Windows.Forms.Panel pnlCenterLeft;
         private System.Windows.Forms.DataGridView dgvProducts;
+        private System.Windows.Forms.Panel pnlPagination;
+        private System.Windows.Forms.Button btnPreviousPage;
+        private System.Windows.Forms.Button btnNextPage;
+        private System.Windows.Forms.Label lblPageInfo;
 
         private System.Windows.Forms.Panel pnlRightDetail;
         private System.Windows.Forms.Label lblDetailTitle;
@@ -397,12 +477,12 @@
         private System.Windows.Forms.TextBox txtBarcode;
         private System.Windows.Forms.Label lblProductName;
         private System.Windows.Forms.TextBox txtProductName;
+        private System.Windows.Forms.Label lblCategory;
+        private System.Windows.Forms.ComboBox cboCategory;
         private System.Windows.Forms.Label lblPrice;
         private System.Windows.Forms.NumericUpDown nudPrice;
         private System.Windows.Forms.Label lblStock;
         private System.Windows.Forms.NumericUpDown nudStock;
-        private System.Windows.Forms.Label lblCategory;
-        private System.Windows.Forms.ComboBox cboCategory;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnUpdate;

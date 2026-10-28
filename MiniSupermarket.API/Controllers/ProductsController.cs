@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MiniSupermarket.API.Data;
 using MiniSupermarket.API.Models;
-
+using MiniSupermarket.API.DTOs;
 namespace MiniSupermarket.API.Controllers
 {
     [Route("api/[controller]")]
@@ -111,5 +111,92 @@ namespace MiniSupermarket.API.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
+        // 7. READ: Lấy danh sách sản phẩm có tìm kiếm và phân trang
+        // GET: /api/products/paged?keyword=banh&pageNumber=1&pageSize=5
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPaged(
+            [FromQuery] string? keyword = null,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 5,
+            [FromQuery] int? categoryId = null)
+        {
+            // Kiểm tra số trang hợp lệ.
+            if (pageNumber < 1)
+            {
+                return BadRequest(new
+                {
+                    message = "Số trang phải lớn hơn hoặc bằng 1."
+                });
+            }
+
+            // Giới hạn kích thước trang để tránh tải quá nhiều dữ liệu.
+            if (pageSize < 1 || pageSize > 50)
+            {
+                return BadRequest(new
+                {
+                    message = "Số sản phẩm mỗi trang phải từ 1 đến 50."
+                });
+            }
+
+            // Truy vấn sản phẩm và lấy thông tin danh mục liên quan.
+            var query = _context.Products
+                .Include(p => p.Category)
+                .AsNoTracking()
+                .AsQueryable();
+
+            // Nếu có từ khóa, tìm theo tên sản phẩm hoặc mã vạch.
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                string search = keyword.Trim();
+
+                query = query.Where(p =>
+                    p.ProductName.Contains(search) ||
+                    p.Barcode.Contains(search));
+            }
+            // Nếu có chọn danh mục, chỉ lấy sản phẩm thuộc danh mục đó.
+            if (categoryId.HasValue && categoryId.Value > 0)
+            {
+                query = query.Where(p => p.CategoryId == categoryId.Value);
+            }
+            // Đếm tổng số sản phẩm sau khi áp dụng điều kiện tìm kiếm.
+            int totalItems = await query.CountAsync();
+
+            // Tính tổng số trang.
+            int totalPages = (int)Math.Ceiling(
+                totalItems / (double)pageSize);
+
+            // Chỉ lấy dữ liệu thuộc trang được yêu cầu.
+            var items = await query
+                .OrderBy(p => p.ProductId)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new ProductItemDto
+                {
+                    ProductId = p.ProductId,
+                    Barcode = p.Barcode,
+                    ProductName = p.ProductName,
+                    Price = p.Price,
+                    StockQuantity = p.StockQuantity,
+                    CategoryId = p.CategoryId,
+                    CategoryName = p.Category != null
+                        ? p.Category.CategoryName
+                        : string.Empty
+                })
+                .ToListAsync();
+
+            // Đóng gói dữ liệu và thông tin phân trang.
+            var result = new PagedResult<ProductItemDto>
+            {
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+                TotalPages = totalPages,
+                Items = items
+            };
+
+            return Ok(result);
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -11,8 +12,14 @@ namespace MiniSupermarket.WinForms
     {
         private readonly HttpClient _httpClient = new HttpClient
         {
-            BaseAddress = new Uri("https://localhost:7195/") // Sửa lại đúng Port API của bạn
+            BaseAddress = new Uri("https://localhost:7195/")
         };
+
+        // Mỗi trang hiển thị 5 khách hàng.
+        private const int PageSize = 5;
+        private int _currentPage = 1;
+        private int _totalPages = 0;
+        private string _currentKeyword = string.Empty;
 
         public FormCustomerManagement()
         {
@@ -24,145 +31,288 @@ namespace MiniSupermarket.WinForms
             await LoadCustomersAsync();
         }
 
-        // 1. Lấy danh sách khách hàng
+        // Tải dữ liệu của trang hiện tại từ API.
         private async Task LoadCustomersAsync()
         {
             try
             {
-                var customers = await _httpClient.GetFromJsonAsync<List<CustomerDto>>("api/customers");
-                dgvCustomers.DataSource = customers;
+                string url =
+                    $"api/customers/paged?pageNumber={_currentPage}" +
+                    $"&pageSize={PageSize}" +
+                    $"&keyword={Uri.EscapeDataString(_currentKeyword)}";
+
+                var result =
+                    await _httpClient.GetFromJsonAsync<PagedResultDto<CustomerDto>>(url);
+
+                if (result == null)
+                {
+                    dgvCustomers.DataSource = null;
+                    _totalPages = 0;
+                    UpdatePaginationControls();
+                    return;
+                }
+
+                // Nếu dữ liệu bị thay đổi làm giảm số trang,
+                // quay về trang hợp lệ cuối cùng.
+                if (result.TotalPages > 0 && _currentPage > result.TotalPages)
+                {
+                    _currentPage = result.TotalPages;
+                    await LoadCustomersAsync();
+                    return;
+                }
+
+                _totalPages = result.TotalPages;
+                _currentPage = result.CurrentPage;
+
+                dgvCustomers.DataSource = result.Items;
+
+                UpdatePaginationControls();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi kết nối API: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Không tải được danh sách khách hàng.\n" +
+                    "Hãy kiểm tra API và endpoint phân trang.\n\n" + ex.Message,
+                    "Lỗi kết nối",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
-        // Click trên DataGridView để hiển thị lên Form
-        private void dgvCustomers_CellClick(object sender, DataGridViewCellEventArgs e)
+        // Cập nhật thông tin trang và trạng thái nút.
+        private void UpdatePaginationControls()
         {
-            if (e.RowIndex >= 0 && dgvCustomers.Rows[e.RowIndex].DataBoundItem is CustomerDto selected)
-            {
-                txtCustomerId.Text = selected.CustomerId.ToString();
-                txtCustomerName.Text = selected.CustomerName;
-                txtPhoneNumber.Text = selected.PhoneNumber;
-                txtAddress.Text = selected.Address;
-                txtRewardPoints.Text = selected.RewardPoints.ToString();
-                txtMembershipRank.Text = selected.MembershipRank;
-            }
+            lblPageInfo.Text = _totalPages == 0
+                ? "Trang 0/0"
+                : $"Trang {_currentPage}/{_totalPages}";
+
+            btnPrevious.Enabled = _currentPage > 1;
+            btnNext.Enabled = _currentPage < _totalPages;
         }
 
-        // 2. Nút Tải lại (btnLoad)
-        private async void btnLoad_Click(object sender, EventArgs e)
+        // Chuyển về trang trước.
+        private async void btnPrevious_Click(object sender, EventArgs e)
         {
+            if (_currentPage <= 1)
+                return;
+
+            _currentPage--;
             await LoadCustomersAsync();
         }
 
-        // 3. Nút Thêm (btnAdd)
+        // Chuyển sang trang sau.
+        private async void btnNext_Click(object sender, EventArgs e)
+        {
+            if (_currentPage >= _totalPages)
+                return;
+
+            _currentPage++;
+            await LoadCustomersAsync();
+        }
+
+        // Hiển thị khách hàng được chọn lên các ô nhập liệu.
+        private void dgvCustomers_CellClick(
+            object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 ||
+                dgvCustomers.Rows[e.RowIndex].DataBoundItem is not CustomerDto selected)
+                return;
+
+            txtCustomerId.Text = selected.CustomerId.ToString();
+            txtCustomerName.Text = selected.CustomerName;
+            txtPhoneNumber.Text = selected.PhoneNumber;
+            txtAddress.Text = selected.Address ?? string.Empty;
+            txtRewardPoints.Text = selected.RewardPoints.ToString();
+            txtMembershipRank.Text = selected.MembershipRank;
+        }
+
+        // Tải lại danh sách và bỏ điều kiện tìm kiếm.
+        private async void btnLoad_Click(object sender, EventArgs e)
+        {
+            _currentKeyword = string.Empty;
+            txtSearch.Clear();
+            _currentPage = 1;
+
+            await LoadCustomersAsync();
+        }
+
+        // Thêm khách hàng.
         private async void btnAdd_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtCustomerName.Text))
+            {
+                MessageBox.Show("Vui lòng nhập tên khách hàng.");
+                txtCustomerName.Focus();
+                return;
+            }
+
             var newCustomer = new CustomerDto
             {
-                CustomerName = txtCustomerName.Text,
-                PhoneNumber = txtPhoneNumber.Text,
-                Address = txtAddress.Text,
-                RewardPoints = int.TryParse(txtRewardPoints.Text, out int pts) ? pts : 0,
-                MembershipRank = string.IsNullOrWhiteSpace(txtMembershipRank.Text) ? "Chuẩn" : txtMembershipRank.Text
+                CustomerName = txtCustomerName.Text.Trim(),
+                PhoneNumber = txtPhoneNumber.Text.Trim(),
+                Address = txtAddress.Text.Trim(),
+                RewardPoints = int.TryParse(
+                    txtRewardPoints.Text, out int points) ? points : 0,
+                MembershipRank = string.IsNullOrWhiteSpace(txtMembershipRank.Text)
+                    ? "Chuẩn"
+                    : txtMembershipRank.Text.Trim()
             };
 
-            var response = await _httpClient.PostAsJsonAsync("api/customers", newCustomer);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                MessageBox.Show("Thêm khách hàng thành công!", "Thông báo");
-                await LoadCustomersAsync();
-            }
-            else
-            {
-                MessageBox.Show("Thêm thất bại!", "Lỗi");
-            }
-        }
+                var response = await _httpClient.PostAsJsonAsync(
+                    "api/customers", newCustomer);
 
-        // 4. Nút Sửa (btnUpdate)
-        private async void btnUpdate_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(txtCustomerId.Text, out int id)) return;
-
-            var updateCustomer = new CustomerDto
-            {
-                CustomerId = id,
-                CustomerName = txtCustomerName.Text,
-                PhoneNumber = txtPhoneNumber.Text,
-                Address = txtAddress.Text,
-                RewardPoints = int.TryParse(txtRewardPoints.Text, out int pts) ? pts : 0,
-                MembershipRank = txtMembershipRank.Text
-            };
-
-            var response = await _httpClient.PutAsJsonAsync($"api/customers/{id}", updateCustomer);
-            if (response.IsSuccessStatusCode)
-            {
-                MessageBox.Show("Cập nhật thành công!", "Thông báo");
-                await LoadCustomersAsync();
-            }
-            else
-            {
-                MessageBox.Show("Cập nhật thất bại!", "Lỗi");
-            }
-        }
-
-        // 5. Nút Xóa (btnDelete)
-        private async void btnDelete_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(txtCustomerId.Text, out int id)) return;
-
-            var confirm = MessageBox.Show("Bạn có chắc chắn muốn xóa khách hàng này?", "Xác nhận", MessageBoxButtons.YesNo);
-            if (confirm == DialogResult.Yes)
-            {
-                var response = await _httpClient.DeleteAsync($"api/customers/{id}");
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("Xóa thành công!", "Thông báo");
+                    MessageBox.Show("Thêm khách hàng thành công!");
+
+                    _currentPage = 1;
+                    ClearInput();
                     await LoadCustomersAsync();
                 }
                 else
                 {
-                    MessageBox.Show("Xóa thất bại!", "Lỗi");
+                    MessageBox.Show(
+                        $"Thêm khách hàng thất bại: {(int)response.StatusCode}");
                 }
-            }
-        }
-
-        // 6. Nút Tìm kiếm (btnSearch)
-        private async void btnSearch_Click(object sender, EventArgs e)
-        {
-            string kw = txtSearch.Text.Trim();
-            if (string.IsNullOrEmpty(kw))
-            {
-                await LoadCustomersAsync();
-                return;
-            }
-
-            try
-            {
-                var result = await _httpClient.GetFromJsonAsync<List<CustomerDto>>($"api/customers/search?keyword={kw}");
-                dgvCustomers.DataSource = result;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Không tìm thấy kết quả: {ex.Message}", "Thông báo");
+                MessageBox.Show($"Lỗi khi thêm khách hàng: {ex.Message}");
             }
         }
 
-        private void FormCustomerManagement_Load_1(object sender, EventArgs e)
+        // Cập nhật khách hàng.
+        private async void btnUpdate_Click(object sender, EventArgs e)
         {
+            if (!int.TryParse(txtCustomerId.Text, out int id))
+            {
+                MessageBox.Show("Vui lòng chọn khách hàng cần cập nhật.");
+                return;
+            }
 
+            var updateCustomer = new CustomerDto
+            {
+                CustomerId = id,
+                CustomerName = txtCustomerName.Text.Trim(),
+                PhoneNumber = txtPhoneNumber.Text.Trim(),
+                Address = txtAddress.Text.Trim(),
+                RewardPoints = int.TryParse(
+                    txtRewardPoints.Text, out int points) ? points : 0,
+                MembershipRank = string.IsNullOrWhiteSpace(txtMembershipRank.Text)
+                    ? "Chuẩn"
+                    : txtMembershipRank.Text.Trim()
+            };
+
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync(
+                    $"api/customers/{id}", updateCustomer);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Cập nhật khách hàng thành công!");
+                    ClearInput();
+                    await LoadCustomersAsync();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        $"Cập nhật thất bại: {(int)response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi cập nhật: {ex.Message}");
+            }
         }
 
-        private void dgvCustomers_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        // Xóa khách hàng.
+        private async void btnDelete_Click(object sender, EventArgs e)
         {
+            if (!int.TryParse(txtCustomerId.Text, out int id))
+            {
+                MessageBox.Show("Vui lòng chọn khách hàng cần xóa.");
+                return;
+            }
 
+            var confirm = MessageBox.Show(
+                "Bạn có chắc chắn muốn xóa khách hàng này?",
+                "Xác nhận xóa",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            try
+            {
+                var response = await _httpClient.DeleteAsync(
+                    $"api/customers/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Xóa khách hàng thành công!");
+                    ClearInput();
+                    await LoadCustomersAsync();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        $"Xóa thất bại: {(int)response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xóa: {ex.Message}");
+            }
+        }
+
+        // Tìm kiếm và bắt đầu từ trang đầu tiên.
+        private async void btnSearch_Click(object sender, EventArgs e)
+        {
+            _currentKeyword = txtSearch.Text.Trim();
+            _currentPage = 1;
+
+            await LoadCustomersAsync();
+        }
+
+        private void ClearInput()
+        {
+            txtCustomerId.Clear();
+            txtCustomerName.Clear();
+            txtPhoneNumber.Clear();
+            txtAddress.Clear();
+            txtRewardPoints.Text = "0";
+            txtMembershipRank.Text = "Chuẩn";
+        }
+
+        private void FormCustomerManagement_Load_1(
+            object sender, EventArgs e)
+        {
+            // Giữ lại nếu Designer còn đăng ký sự kiện này.
+        }
+
+        private void dgvCustomers_CellContentClick(
+            object sender, DataGridViewCellEventArgs e)
+        {
+            // Giữ lại nếu Designer còn đăng ký sự kiện này.
         }
     }
 
-    // DTO hứng dữ liệu phía WinForms
+    // DTO phân trang dùng chung trong project WinForms.
+    // Chỉ giữ một định nghĩa PagedResultDto<T> trong toàn project.
+    public class PagedResultDto<T>
+    {
+        public int CurrentPage { get; set; }
+        public int PageSize { get; set; }
+        public int TotalItems { get; set; }
+        public int TotalPages { get; set; }
+        public List<T> Items { get; set; } = new List<T>();
+    }
+
+    // DTO khách hàng phía WinForms.
     public class CustomerDto
     {
         public int CustomerId { get; set; }

@@ -9,8 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Cấu hình kết nối Cơ sở dữ liệu (DbContext)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<SupermarketDbContext>(options =>
-    options.UseSqlServer(connectionString));
+{
+    options.UseSqlServer(connectionString);
+
+    // Chỉ ghi log SQL khi chạy ở môi trường Development.
+    if (builder.Environment.IsDevelopment())
+    {
+        options
+            .EnableSensitiveDataLogging()
+            .LogTo(Console.WriteLine, LogLevel.Information);
+    }
+});
+
 // Đăng ký dịch vụ băm và xác minh mật khẩu.
 builder.Services.AddSingleton<PasswordService>();
 // Cấu hình dịch vụ xác thực JWT Bearer

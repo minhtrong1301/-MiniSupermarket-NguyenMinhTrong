@@ -98,5 +98,66 @@ namespace MiniSupermarket.API.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
+        // 1.1 READ: Lấy danh mục có phân trang
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPaged(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 5,
+            [FromQuery] string? keyword = null)
+        {
+            // Kiểm tra số trang và số lượng bản ghi mỗi trang
+            if (pageNumber < 1)
+            {
+                return BadRequest(new
+                {
+                    message = "Số trang phải lớn hơn hoặc bằng 1!"
+                });
+            }
+
+            if (pageSize < 1 || pageSize > 100)
+            {
+                return BadRequest(new
+                {
+                    message = "Số danh mục mỗi trang phải từ 1 đến 100!"
+                });
+            }
+
+            // Truy vấn danh mục từ SQL Server, không theo dõi để tối ưu đọc dữ liệu
+            var query = _context.Categories.AsNoTracking();
+
+            // Nếu có từ khóa thì lọc theo tên danh mục
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                keyword = keyword.Trim();
+                query = query.Where(c => c.CategoryName.Contains(keyword));
+            }
+
+            // Đếm tổng số danh mục sau khi áp dụng tìm kiếm
+            var totalItems = await query.CountAsync();
+
+            // Tính tổng số trang
+            var totalPages = (int)Math.Ceiling(
+                totalItems / (double)pageSize
+            );
+
+            // Lấy danh mục của trang hiện tại
+            var items = await query
+                .OrderBy(c => c.CategoryId)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // Trả về dữ liệu và thông tin phân trang
+            return Ok(new
+            {
+                currentPage = pageNumber,
+                pageSize = pageSize,
+                totalItems = totalItems,
+                totalPages = totalPages,
+                items = items
+            });
+        }
+
     }
 }

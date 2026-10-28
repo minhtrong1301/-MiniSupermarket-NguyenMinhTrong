@@ -9,13 +9,24 @@ namespace MiniSupermarket.WinForms
 {
     public partial class FormQuickReport : Form
     {
-        // Màu sắc chủ đạo của màn hình báo cáo
-        private readonly Color _backgroundColor = Color.FromArgb(245, 247, 250);
-        private readonly Color _textColor = Color.FromArgb(45, 55, 72);
-        private readonly Color _mutedColor = Color.FromArgb(113, 128, 150);
-        private readonly Color _blueColor = Color.FromArgb(49, 130, 206);
-        private readonly Color _greenColor = Color.FromArgb(38, 166, 115);
-        private readonly Color _purpleColor = Color.FromArgb(128, 90, 213);
+        // Màu sắc chủ đạo của dashboard.
+        private readonly Color _backgroundColor =
+            Color.FromArgb(243, 246, 251);
+
+        private readonly Color _textColor =
+            Color.FromArgb(30, 41, 59);
+
+        private readonly Color _mutedColor =
+            Color.FromArgb(100, 116, 139);
+
+        private readonly Color _blueColor =
+            Color.FromArgb(37, 99, 235);
+
+        private readonly Color _greenColor =
+            Color.FromArgb(22, 163, 74);
+
+        private readonly Color _purpleColor =
+            Color.FromArgb(147, 51, 234);
 
         private Label lblPageTitle;
         private Label lblPageDescription;
@@ -23,10 +34,14 @@ namespace MiniSupermarket.WinForms
         public FormQuickReport()
         {
             InitializeComponent();
+
             ApplyDashboardStyle();
+
+            // Tự căn chỉnh các thẻ khi thay đổi kích thước form.
+            Resize += (s, e) => LayoutCards();
         }
 
-        // Thiết lập giao diện tổng quan báo cáo
+        // Thiết lập giao diện tổng quan.
         private void ApplyDashboardStyle()
         {
             Text = "Báo cáo doanh thu";
@@ -35,26 +50,19 @@ namespace MiniSupermarket.WinForms
             MinimumSize = new Size(900, 500);
             Font = new Font("Segoe UI", 10F);
 
-            // API quick-report hiện tại trả số liệu tổng,
-           
-            // Hiển thị lại chức năng chọn ngày báo cáo
-            dtpReportDate.Visible = true;
-            lblDateSelect.Visible = true;
-
-            // Tiêu đề chính
+            // Tiêu đề chính.
             lblPageTitle = new Label
             {
                 Text = "Báo cáo doanh thu",
                 Font = new Font("Segoe UI", 23F, FontStyle.Bold),
                 ForeColor = _textColor,
                 AutoSize = true,
-                Location = new Point(30, 22)
+                Location = new Point(30, 20)
             };
 
-            // Mô tả ngắn bên dưới tiêu đề
             lblPageDescription = new Label
             {
-                Text = "Tổng quan hoạt động bán hàng từ dữ liệu hệ thống",
+                Text = "Tổng quan hoạt động bán hàng trong ngày",
                 Font = new Font("Segoe UI", 10F),
                 ForeColor = _mutedColor,
                 AutoSize = true,
@@ -64,18 +72,33 @@ namespace MiniSupermarket.WinForms
             Controls.Add(lblPageTitle);
             Controls.Add(lblPageDescription);
 
-            // Nút tải lại báo cáo
+            // Khu vực chọn ngày báo cáo.
+            lblDateSelect.Text = "Ngày báo cáo";
+            lblDateSelect.AutoSize = true;
+            lblDateSelect.Font =
+                new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblDateSelect.ForeColor = _textColor;
+            lblDateSelect.Location = new Point(30, 125);
+
+            dtpReportDate.Format = DateTimePickerFormat.Short;
+            dtpReportDate.Location = new Point(145, 118);
+            dtpReportDate.Size = new Size(160, 35);
+            dtpReportDate.Font = new Font("Segoe UI", 10F);
+
+            // Nút làm mới báo cáo.
             btnRunReport.Text = "Làm mới báo cáo";
-            btnRunReport.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnRunReport.Font =
+                new Font("Segoe UI", 10F, FontStyle.Bold);
             btnRunReport.BackColor = _blueColor;
             btnRunReport.ForeColor = Color.White;
             btnRunReport.FlatStyle = FlatStyle.Flat;
             btnRunReport.FlatAppearance.BorderSize = 0;
             btnRunReport.Cursor = Cursors.Hand;
-            btnRunReport.Size = new Size(165, 42);
-            btnRunReport.Location = new Point(30, 110);
+            btnRunReport.Size = new Size(165, 38);
+            btnRunReport.Location = new Point(325, 115);
+            btnRunReport.UseVisualStyleBackColor = false;
 
-            // Thẻ tổng số hóa đơn
+            // Thẻ tổng số hóa đơn.
             StyleCard(
                 panelCard1,
                 lblCard1Title,
@@ -84,7 +107,7 @@ namespace MiniSupermarket.WinForms
                 "0",
                 _blueColor);
 
-            // Thẻ tổng doanh thu
+            // Thẻ tổng doanh thu.
             StyleCard(
                 panelCard2,
                 lblCard2Title,
@@ -93,7 +116,7 @@ namespace MiniSupermarket.WinForms
                 "0 VNĐ",
                 _greenColor);
 
-            // Thẻ sản phẩm bán chạy
+            // Thẻ mặt hàng bán chạy nhất.
             StyleCard(
                 panelCard3,
                 lblCard3Title,
@@ -102,14 +125,11 @@ namespace MiniSupermarket.WinForms
                 "Chưa có dữ liệu",
                 _purpleColor);
 
-            // Bố trí ba thẻ trên cùng một hàng
             LayoutCards();
-
-            // Tải báo cáo ngay khi mở form
-            Load += FormQuickReport_Load;
         }
 
-        // Định dạng thống nhất cho từng thẻ thống kê
+        // Định dạng thống nhất cho các thẻ thống kê.
+
         private void StyleCard(
             Panel panel,
             Label titleLabel,
@@ -118,71 +138,98 @@ namespace MiniSupermarket.WinForms
             string initialValue,
             Color accentColor)
         {
+            // Thẻ trắng, viền nhẹ, đồng bộ với giao diện MiniMart POS.
             panel.BackColor = Color.White;
             panel.BorderStyle = BorderStyle.FixedSingle;
-            panel.Size = new Size(280, 155);
 
             titleLabel.Text = title;
             titleLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            titleLabel.ForeColor = _mutedColor;
+            titleLabel.ForeColor = Color.FromArgb(100, 116, 139);
             titleLabel.AutoSize = false;
-            titleLabel.Location = new Point(18, 20);
-            titleLabel.Size = new Size(panel.Width - 36, 30);
+            titleLabel.Location = new Point(20, 16);
+            titleLabel.Size = new Size(panel.Width - 40, 28);
             titleLabel.TextAlign = ContentAlignment.MiddleLeft;
 
             valueLabel.Text = initialValue;
-            valueLabel.Font = new Font("Segoe UI", 19F, FontStyle.Bold);
+            valueLabel.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             valueLabel.ForeColor = accentColor;
             valueLabel.AutoSize = false;
-            valueLabel.Location = new Point(18, 62);
-            valueLabel.Size = new Size(panel.Width - 36, 65);
+            valueLabel.Location = new Point(20, 53);
+            valueLabel.Size = new Size(panel.Width - 40, 65);
             valueLabel.TextAlign = ContentAlignment.MiddleLeft;
 
-            // Tránh tên sản phẩm dài làm tràn khỏi thẻ
+            // Tránh nội dung dài làm tràn khỏi thẻ.
             valueLabel.AutoEllipsis = true;
         }
 
-        // Tính vị trí thẻ theo chiều rộng của form
+        // Bố trí ba thẻ cùng hàng, khoảng cách đồng đều.
         private void LayoutCards()
         {
-            int margin = 30;
-            int gap = 20;
-            int availableWidth = ClientSize.Width - margin * 2 - gap * 2;
-            int cardWidth = availableWidth / 3;
+            int margin = 26;
+            int gap = 16;
 
-            panelCard1.SetBounds(margin, 180, cardWidth, 155);
-            panelCard2.SetBounds(margin + cardWidth + gap, 180, cardWidth, 155);
+            int availableWidth =
+                ClientSize.Width - margin * 2 - gap * 2;
+
+            int cardWidth = availableWidth / 3;
+            int cardHeight = 138;
+            int top = 165;
+
+            if (cardWidth <= 0)
+                return;
+
+            panelCard1.SetBounds(
+                margin, top, cardWidth, cardHeight);
+
+            panelCard2.SetBounds(
+                margin + cardWidth + gap,
+                top, cardWidth, cardHeight);
+
             panelCard3.SetBounds(
                 margin + (cardWidth + gap) * 2,
-                180,
-                cardWidth,
-                155);
+                top, cardWidth, cardHeight);
 
-            ResizeCardLabels(panelCard1, lblCard1Title, lblTotalOrders);
-            ResizeCardLabels(panelCard2, lblCard2Title, lblTotalRevenue);
-            ResizeCardLabels(panelCard3, lblCard3Title, lblBestSeller);
+            ResizeCardLabels(
+                panelCard1, lblCard1Title, lblTotalOrders);
+
+            ResizeCardLabels(
+                panelCard2, lblCard2Title, lblTotalRevenue);
+
+            ResizeCardLabels(
+                panelCard3, lblCard3Title, lblBestSeller);
         }
 
+
+        // Cập nhật chiều rộng nội dung trong từng thẻ.
         private void ResizeCardLabels(
             Panel panel,
             Label titleLabel,
             Label valueLabel)
         {
-            titleLabel.Width = panel.ClientSize.Width - 36;
-            valueLabel.Width = panel.ClientSize.Width - 36;
+            int labelWidth = Math.Max(
+                100, panel.ClientSize.Width - 40);
+
+            titleLabel.Width = labelWidth;
+            valueLabel.Width = labelWidth;
         }
 
-        private async void FormQuickReport_Load(object sender, EventArgs e)
+        // Sự kiện được đăng ký trong Designer.cs.
+        private async void FormQuickReport_Load(
+            object sender,
+            EventArgs e)
         {
             await RunReportAsync();
         }
 
-        private async void btnRunReport_Click(object sender, EventArgs e)
+        // Người dùng bấm nút làm mới báo cáo.
+        private async void btnRunReport_Click(
+            object sender,
+            EventArgs e)
         {
             await RunReportAsync();
         }
 
-        // Gọi API và cập nhật các chỉ số trên giao diện
+        // Gọi API và cập nhật dữ liệu thật lên giao diện.
         private async Task RunReportAsync()
         {
             try
@@ -190,15 +237,19 @@ namespace MiniSupermarket.WinForms
                 btnRunReport.Enabled = false;
                 btnRunReport.Text = "Đang tải...";
 
-                // Lấy ngày người dùng chọn trên giao diện
-                string selectedDate = dtpReportDate.Value.ToString("yyyy-MM-dd");
+                string selectedDate =
+                    dtpReportDate.Value.ToString("yyyy-MM-dd");
 
-                // Gửi ngày đã chọn lên API để lọc báo cáo
-                string endpoint = $"Orders/quick-report?date={selectedDate}";
+                string endpoint =
+                    $"Orders/quick-report?date={selectedDate}";
 
-                string json = await ApiClientService.GetDataWithTokenAsync(endpoint);
+                string json =
+                    await ApiClientService.GetDataWithTokenAsync(
+                        endpoint);
 
-                using JsonDocument document = JsonDocument.Parse(json);
+                using JsonDocument document =
+                    JsonDocument.Parse(json);
+
                 JsonElement root = document.RootElement;
 
                 if (root.ValueKind != JsonValueKind.Object)
@@ -207,11 +258,14 @@ namespace MiniSupermarket.WinForms
                         "API không trả về dữ liệu báo cáo hợp lệ.");
                 }
 
-                int totalOrders = root.GetProperty("totalOrders").GetInt32();
+                int totalOrders =
+                    root.GetProperty("totalOrders").GetInt32();
 
-                decimal totalRevenue = root.GetProperty("totalRevenue").GetDecimal();
+                decimal totalRevenue =
+                    root.GetProperty("totalRevenue").GetDecimal();
 
-                string bestSeller = root.GetProperty("bestSeller").GetString()
+                string bestSeller =
+                    root.GetProperty("bestSeller").GetString()
                     ?? "Chưa có dữ liệu";
 
                 int bestSellerQuantity = 0;
@@ -220,11 +274,13 @@ namespace MiniSupermarket.WinForms
                     "bestSellerQuantity",
                     out JsonElement quantityElement))
                 {
-                    bestSellerQuantity = quantityElement.GetInt32();
+                    bestSellerQuantity =
+                        quantityElement.GetInt32();
                 }
 
-                // Hiển thị số liệu thật do API trả về
-                lblTotalOrders.Text = totalOrders.ToString("N0");
+                // Hiển thị số liệu từ API.
+                lblTotalOrders.Text =
+                    totalOrders.ToString("N0");
 
                 lblTotalRevenue.Text =
                     totalRevenue.ToString("N0") + " VNĐ";
