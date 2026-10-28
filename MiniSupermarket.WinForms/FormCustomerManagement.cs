@@ -155,6 +155,11 @@ namespace MiniSupermarket.WinForms
         {
 
         }
+
+        private void dgvCustomers_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 
     // DTO hứng dữ liệu phía WinForms

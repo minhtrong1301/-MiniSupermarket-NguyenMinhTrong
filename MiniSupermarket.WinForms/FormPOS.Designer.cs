@@ -1,4 +1,5 @@
-﻿namespace MiniSupermarket.WinForms
+﻿
+namespace MiniSupermarket.WinForms
 {
     partial class FormPOS
     {
@@ -7,9 +8,8 @@
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
+
             base.Dispose(disposing);
         }
 
@@ -17,291 +17,353 @@
 
         private void InitializeComponent()
         {
-            this.panelLeft = new System.Windows.Forms.Panel();
-            this.dgvCart = new System.Windows.Forms.DataGridView();
-            this.panelTopLeft = new System.Windows.Forms.Panel();
-            this.lblBarcode = new System.Windows.Forms.Label();
-            this.txtBarcode = new System.Windows.Forms.TextBox();
-            this.panelRight = new System.Windows.Forms.Panel();
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.lblPhone = new System.Windows.Forms.Label();
-            this.txtCustomerPhone = new System.Windows.Forms.TextBox();
-            this.btnSearchCustomer = new System.Windows.Forms.Button();
-            this.lblCustNameHeader = new System.Windows.Forms.Label();
-            this.lblCustomerName = new System.Windows.Forms.Label();
-            this.lblTotalHeader = new System.Windows.Forms.Label();
-            this.lblTotalAmount = new System.Windows.Forms.Label();
-            this.lblCashHeader = new System.Windows.Forms.Label();
-            this.txtCashReceived = new System.Windows.Forms.TextBox();
-            this.lblChangeHeader = new System.Windows.Forms.Label();
-            this.lblChange = new System.Windows.Forms.Label();
-            this.btnCheckout = new System.Windows.Forms.Button();
-            this.btnClearCart = new System.Windows.Forms.Button();
-
-            this.panelLeft.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCart)).BeginInit();
-            this.panelTopLeft.SuspendLayout();
-            this.panelRight.SuspendLayout();
-            this.SuspendLayout();
-
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            panelLeft = new Panel();
+            dgvCart = new DataGridView();
+            panelTopLeft = new Panel();
+            lblBarcode = new Label();
+            txtBarcode = new TextBox();
+            panelRight = new Panel();
+            lblTitle = new Label();
+            lblPhone = new Label();
+            txtCustomerPhone = new TextBox();
+            btnSearchCustomer = new Button();
+            lblCustNameHeader = new Label();
+            lblCustomerName = new Label();
+            lblTotalHeader = new Label();
+            lblTotalAmount = new Label();
+            lblCashHeader = new Label();
+            txtCashReceived = new TextBox();
+            lblChangeHeader = new Label();
+            lblChange = new Label();
+            btnCheckout = new Button();
+            btnClearCart = new Button();
+            panelLeft.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvCart).BeginInit();
+            panelTopLeft.SuspendLayout();
+            panelRight.SuspendLayout();
+            SuspendLayout();
             // 
-            // panelLeft (Chiếm 65% bên trái)
+            // panelLeft
             // 
-            this.panelLeft.Controls.Add(this.dgvCart);
-            this.panelLeft.Controls.Add(this.panelTopLeft);
-            this.panelLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelLeft.Location = new System.Drawing.Point(0, 0);
-            this.panelLeft.Name = "panelLeft";
-            this.panelLeft.Padding = new System.Windows.Forms.Padding(10);
-            this.panelLeft.Size = new System.Drawing.Size(650, 600);
-            this.panelLeft.TabIndex = 0;
-
-            // 
-            // panelTopLeft (Khu vực quét mã vạch)
-            // 
-            this.panelTopLeft.Controls.Add(this.lblBarcode);
-            this.panelTopLeft.Controls.Add(this.txtBarcode);
-            this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTopLeft.Location = new System.Drawing.Point(10, 10);
-            this.panelTopLeft.Name = "panelTopLeft";
-            this.panelTopLeft.Size = new System.Drawing.Size(630, 50);
-            this.panelTopLeft.TabIndex = 0;
-
-            // 
-            // lblBarcode
-            // 
-            this.lblBarcode.AutoSize = true;
-            this.lblBarcode.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblBarcode.Location = new System.Drawing.Point(5, 12);
-            this.lblBarcode.Name = "lblBarcode";
-            this.lblBarcode.Size = new System.Drawing.Size(155, 20);
-            this.lblBarcode.TabIndex = 0;
-            this.lblBarcode.Text = "Quét Mã Vạch (ENTER):";
-
-            // 
-            // txtBarcode
-            // 
-            this.txtBarcode.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.txtBarcode.Location = new System.Drawing.Point(170, 8);
-            this.txtBarcode.Name = "txtBarcode";
-            this.txtBarcode.Size = new System.Drawing.Size(450, 29);
-            this.txtBarcode.TabIndex = 1;
-            this.txtBarcode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtBarcode_KeyDown);
-
+            panelLeft.BackColor = Color.FromArgb(245, 247, 251);
+            panelLeft.Controls.Add(dgvCart);
+            panelLeft.Controls.Add(panelTopLeft);
+            panelLeft.Dock = DockStyle.Left;
+            panelLeft.Location = new Point(0, 0);
+            panelLeft.Margin = new Padding(3, 4, 3, 4);
+            panelLeft.Name = "panelLeft";
+            panelLeft.Padding = new Padding(23, 27, 23, 27);
+            panelLeft.Size = new Size(869, 960);
+            panelLeft.TabIndex = 0;
             // 
             // dgvCart
             // 
-            this.dgvCart.AllowUserToAddRows = false;
-            this.dgvCart.AllowUserToDeleteRows = false;
-            this.dgvCart.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvCart.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvCart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvCart.Location = new System.Drawing.Point(10, 60);
-            this.dgvCart.Name = "dgvCart";
-            this.dgvCart.ReadOnly = true;
-            this.dgvCart.RowHeadersVisible = false;
-            this.dgvCart.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCart.Size = new System.Drawing.Size(630, 530);
-            this.dgvCart.TabIndex = 1;
-
+            dgvCart.AllowUserToAddRows = false;
+            dgvCart.AllowUserToDeleteRows = false;
+            dgvCart.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(248, 250, 252);
+            dgvCart.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dgvCart.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvCart.BackgroundColor = Color.White;
+            dgvCart.BorderStyle = BorderStyle.None;
+            dgvCart.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvCart.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(30, 41, 59);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.Padding = new Padding(8, 0, 8, 0);
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvCart.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dgvCart.ColumnHeadersHeight = 48;
+            dgvCart.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.White;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle3.ForeColor = Color.FromArgb(51, 65, 85);
+            dataGridViewCellStyle3.Padding = new Padding(8, 4, 8, 4);
+            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(219, 234, 254);
+            dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(30, 41, 59);
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dgvCart.DefaultCellStyle = dataGridViewCellStyle3;
+            dgvCart.Dock = DockStyle.Fill;
+            dgvCart.EnableHeadersVisualStyles = false;
+            dgvCart.GridColor = Color.FromArgb(235, 239, 245);
+            dgvCart.Location = new Point(23, 150);
+            dgvCart.Margin = new Padding(0, 19, 0, 0);
+            dgvCart.MultiSelect = false;
+            dgvCart.Name = "dgvCart";
+            dgvCart.ReadOnly = true;
+            dgvCart.RowHeadersVisible = false;
+            dgvCart.RowHeadersWidth = 51;
+            dgvCart.RowTemplate.Height = 42;
+            dgvCart.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvCart.Size = new Size(823, 783);
+            dgvCart.TabIndex = 1;
+            dgvCart.CellContentClick += dgvCart_CellContentClick_1;
             // 
-            // panelRight (Chiếm 35% bên phải)
+            // panelTopLeft
             // 
-            this.panelRight.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.panelRight.Controls.Add(this.lblTitle);
-            this.panelRight.Controls.Add(this.lblPhone);
-            this.panelRight.Controls.Add(this.txtCustomerPhone);
-            this.panelRight.Controls.Add(this.btnSearchCustomer);
-            this.panelRight.Controls.Add(this.lblCustNameHeader);
-            this.panelRight.Controls.Add(this.lblCustomerName);
-            this.panelRight.Controls.Add(this.lblTotalHeader);
-            this.panelRight.Controls.Add(this.lblTotalAmount);
-            this.panelRight.Controls.Add(this.lblCashHeader);
-            this.panelRight.Controls.Add(this.txtCashReceived);
-            this.panelRight.Controls.Add(this.lblChangeHeader);
-            this.panelRight.Controls.Add(this.lblChange);
-            this.panelRight.Controls.Add(this.btnCheckout);
-            this.panelRight.Controls.Add(this.btnClearCart);
-            this.panelRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelRight.Location = new System.Drawing.Point(650, 0);
-            this.panelRight.Name = "panelRight";
-            this.panelRight.Padding = new System.Windows.Forms.Padding(15);
-            this.panelRight.Size = new System.Drawing.Size(350, 600);
-            this.panelRight.TabIndex = 1;
-
+            panelTopLeft.BackColor = Color.White;
+            panelTopLeft.Controls.Add(lblBarcode);
+            panelTopLeft.Controls.Add(txtBarcode);
+            panelTopLeft.Dock = DockStyle.Top;
+            panelTopLeft.Location = new Point(23, 27);
+            panelTopLeft.Margin = new Padding(3, 4, 3, 4);
+            panelTopLeft.Name = "panelTopLeft";
+            panelTopLeft.Padding = new Padding(14, 16, 14, 16);
+            panelTopLeft.Size = new Size(823, 123);
+            panelTopLeft.TabIndex = 0;
+            // 
+            // lblBarcode
+            // 
+            lblBarcode.AutoSize = true;
+            lblBarcode.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblBarcode.ForeColor = Color.FromArgb(51, 65, 85);
+            lblBarcode.Location = new Point(18, 20);
+            lblBarcode.Name = "lblBarcode";
+            lblBarcode.Size = new Size(183, 23);
+            lblBarcode.TabIndex = 0;
+            lblBarcode.Text = "QUÉT MÃ SẢN PHẨM";
+            // 
+            // txtBarcode
+            // 
+            txtBarcode.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtBarcode.BackColor = Color.FromArgb(248, 250, 252);
+            txtBarcode.BorderStyle = BorderStyle.FixedSingle;
+            txtBarcode.Font = new Font("Segoe UI", 12F);
+            txtBarcode.Location = new Point(18, 57);
+            txtBarcode.Margin = new Padding(3, 4, 3, 4);
+            txtBarcode.Name = "txtBarcode";
+            txtBarcode.Size = new Size(781, 34);
+            txtBarcode.TabIndex = 1;
+            txtBarcode.KeyDown += txtBarcode_KeyDown;
+            // 
+            // panelRight
+            // 
+            panelRight.BackColor = Color.White;
+            panelRight.Controls.Add(lblTitle);
+            panelRight.Controls.Add(lblPhone);
+            panelRight.Controls.Add(txtCustomerPhone);
+            panelRight.Controls.Add(btnSearchCustomer);
+            panelRight.Controls.Add(lblCustNameHeader);
+            panelRight.Controls.Add(lblCustomerName);
+            panelRight.Controls.Add(lblTotalHeader);
+            panelRight.Controls.Add(lblTotalAmount);
+            panelRight.Controls.Add(lblCashHeader);
+            panelRight.Controls.Add(txtCashReceived);
+            panelRight.Controls.Add(lblChangeHeader);
+            panelRight.Controls.Add(lblChange);
+            panelRight.Controls.Add(btnCheckout);
+            panelRight.Controls.Add(btnClearCart);
+            panelRight.Dock = DockStyle.Fill;
+            panelRight.Location = new Point(869, 0);
+            panelRight.Margin = new Padding(3, 4, 3, 4);
+            panelRight.Name = "panelRight";
+            panelRight.Padding = new Padding(27, 32, 27, 32);
+            panelRight.Size = new Size(502, 960);
+            panelRight.TabIndex = 1;
+            panelRight.Paint += panelRight_Paint_1;
             // 
             // lblTitle
             // 
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.Navy;
-            this.lblTitle.Location = new System.Drawing.Point(15, 15);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(236, 25);
-            this.lblTitle.Text = "THÔNG TIN THANH TOÁN";
-
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.FromArgb(30, 41, 59);
+            lblTitle.Location = new Point(27, 33);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(210, 40);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "THANH TOÁN";
             // 
             // lblPhone
             // 
-            this.lblPhone.AutoSize = true;
-            this.lblPhone.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblPhone.Location = new System.Drawing.Point(15, 60);
-            this.lblPhone.Name = "lblPhone";
-            this.lblPhone.Size = new System.Drawing.Size(107, 17);
-            this.lblPhone.Text = "SĐT Khách Hàng:";
-
+            lblPhone.AutoSize = true;
+            lblPhone.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblPhone.ForeColor = Color.FromArgb(71, 85, 105);
+            lblPhone.Location = new Point(27, 111);
+            lblPhone.Name = "lblPhone";
+            lblPhone.Size = new Size(145, 23);
+            lblPhone.TabIndex = 1;
+            lblPhone.Text = "Số điện thoại KH";
             // 
             // txtCustomerPhone
             // 
-            this.txtCustomerPhone.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtCustomerPhone.Location = new System.Drawing.Point(18, 80);
-            this.txtCustomerPhone.Name = "txtCustomerPhone";
-            this.txtCustomerPhone.Size = new System.Drawing.Size(200, 25);
-            this.txtCustomerPhone.TabIndex = 2;
-
+            txtCustomerPhone.BackColor = Color.FromArgb(248, 250, 252);
+            txtCustomerPhone.BorderStyle = BorderStyle.FixedSingle;
+            txtCustomerPhone.Font = new Font("Segoe UI", 11F);
+            txtCustomerPhone.Location = new Point(32, 148);
+            txtCustomerPhone.Margin = new Padding(3, 4, 3, 4);
+            txtCustomerPhone.Name = "txtCustomerPhone";
+            txtCustomerPhone.Size = new Size(251, 32);
+            txtCustomerPhone.TabIndex = 2;
             // 
             // btnSearchCustomer
             // 
-            this.btnSearchCustomer.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSearchCustomer.Location = new System.Drawing.Point(225, 79);
-            this.btnSearchCustomer.Name = "btnSearchCustomer";
-            this.btnSearchCustomer.Size = new System.Drawing.Size(100, 27);
-            this.btnSearchCustomer.TabIndex = 3;
-            this.btnSearchCustomer.Text = "Tìm Khách";
-            this.btnSearchCustomer.UseVisualStyleBackColor = true;
-            this.btnSearchCustomer.Click += new System.EventHandler(this.btnSearchCustomer_Click);
-
+            btnSearchCustomer.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSearchCustomer.BackColor = Color.FromArgb(37, 99, 235);
+            btnSearchCustomer.FlatAppearance.BorderSize = 0;
+            btnSearchCustomer.FlatStyle = FlatStyle.Flat;
+            btnSearchCustomer.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnSearchCustomer.ForeColor = Color.White;
+            btnSearchCustomer.Location = new Point(294, 144);
+            btnSearchCustomer.Margin = new Padding(3, 4, 3, 4);
+            btnSearchCustomer.Name = "btnSearchCustomer";
+            btnSearchCustomer.Size = new Size(149, 45);
+            btnSearchCustomer.TabIndex = 3;
+            btnSearchCustomer.Text = "Tìm khách";
+            btnSearchCustomer.UseVisualStyleBackColor = false;
+            btnSearchCustomer.Click += btnSearchCustomer_Click;
             // 
             // lblCustNameHeader
             // 
-            this.lblCustNameHeader.AutoSize = true;
-            this.lblCustNameHeader.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblCustNameHeader.Location = new System.Drawing.Point(15, 115);
-            this.lblCustNameHeader.Name = "lblCustNameHeader";
-            this.lblCustNameHeader.Size = new System.Drawing.Size(81, 17);
-            this.lblCustNameHeader.Text = "Khách Hàng:";
-
+            lblCustNameHeader.AutoSize = true;
+            lblCustNameHeader.Font = new Font("Segoe UI", 10F);
+            lblCustNameHeader.ForeColor = Color.FromArgb(100, 116, 139);
+            lblCustNameHeader.Location = new Point(27, 220);
+            lblCustNameHeader.Name = "lblCustNameHeader";
+            lblCustNameHeader.Size = new Size(101, 23);
+            lblCustNameHeader.TabIndex = 4;
+            lblCustNameHeader.Text = "Khách hàng";
             // 
             // lblCustomerName
             // 
-            this.lblCustomerName.AutoSize = true;
-            this.lblCustomerName.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblCustomerName.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblCustomerName.Location = new System.Drawing.Point(100, 115);
-            this.lblCustomerName.Name = "lblCustomerName";
-            this.lblCustomerName.Size = new System.Drawing.Size(102, 19);
-            this.lblCustomerName.Text = "Khách vãng lai";
-
+            lblCustomerName.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblCustomerName.ForeColor = Color.FromArgb(30, 64, 175);
+            lblCustomerName.Location = new Point(27, 253);
+            lblCustomerName.Name = "lblCustomerName";
+            lblCustomerName.Size = new Size(411, 43);
+            lblCustomerName.TabIndex = 5;
+            lblCustomerName.Text = "Khách vãng lai";
             // 
             // lblTotalHeader
             // 
-            this.lblTotalHeader.AutoSize = true;
-            this.lblTotalHeader.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblTotalHeader.Location = new System.Drawing.Point(15, 160);
-            this.lblTotalHeader.Name = "lblTotalHeader";
-            this.lblTotalHeader.Size = new System.Drawing.Size(102, 20);
-            this.lblTotalHeader.Text = "TỔNG TIỀN:";
-
+            lblTotalHeader.AutoSize = true;
+            lblTotalHeader.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblTotalHeader.ForeColor = Color.FromArgb(71, 85, 105);
+            lblTotalHeader.Location = new Point(27, 329);
+            lblTotalHeader.Name = "lblTotalHeader";
+            lblTotalHeader.Size = new Size(126, 25);
+            lblTotalHeader.TabIndex = 6;
+            lblTotalHeader.Text = "TỔNG CỘNG";
             // 
             // lblTotalAmount
             // 
-            this.lblTotalAmount.AutoSize = true;
-            this.lblTotalAmount.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
-            this.lblTotalAmount.ForeColor = System.Drawing.Color.DarkRed;
-            this.lblTotalAmount.Location = new System.Drawing.Point(15, 185);
-            this.lblTotalAmount.Name = "lblTotalAmount";
-            this.lblTotalAmount.Size = new System.Drawing.Size(64, 37);
-            this.lblTotalAmount.Text = "0 đ";
-
+            lblTotalAmount.Font = new Font("Segoe UI", 25F, FontStyle.Bold);
+            lblTotalAmount.ForeColor = Color.FromArgb(220, 38, 38);
+            lblTotalAmount.Location = new Point(27, 369);
+            lblTotalAmount.Name = "lblTotalAmount";
+            lblTotalAmount.Size = new Size(411, 64);
+            lblTotalAmount.TabIndex = 7;
+            lblTotalAmount.Text = "0 đ";
             // 
             // lblCashHeader
             // 
-            this.lblCashHeader.AutoSize = true;
-            this.lblCashHeader.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblCashHeader.Location = new System.Drawing.Point(15, 240);
-            this.lblCashHeader.Name = "lblCashHeader";
-            this.lblCashHeader.Size = new System.Drawing.Size(117, 19);
-            this.lblCashHeader.Text = "Tiền Khách Đưa:";
-
+            lblCashHeader.AutoSize = true;
+            lblCashHeader.Font = new Font("Segoe UI", 10.5F, FontStyle.Bold);
+            lblCashHeader.ForeColor = Color.FromArgb(51, 65, 85);
+            lblCashHeader.Location = new Point(27, 476);
+            lblCashHeader.Name = "lblCashHeader";
+            lblCashHeader.Size = new Size(143, 25);
+            lblCashHeader.TabIndex = 8;
+            lblCashHeader.Text = "Tiền khách đưa";
             // 
             // txtCashReceived
             // 
-            this.txtCashReceived.Font = new System.Drawing.Font("Segoe UI", 14F);
-            this.txtCashReceived.Location = new System.Drawing.Point(18, 265);
-            this.txtCashReceived.Name = "txtCashReceived";
-            this.txtCashReceived.Size = new System.Drawing.Size(307, 32);
-            this.txtCashReceived.TabIndex = 4;
-            this.txtCashReceived.TextChanged += new System.EventHandler(this.txtCashReceived_TextChanged);
-
+            txtCashReceived.BackColor = Color.FromArgb(248, 250, 252);
+            txtCashReceived.BorderStyle = BorderStyle.FixedSingle;
+            txtCashReceived.Font = new Font("Segoe UI", 14F);
+            txtCashReceived.Location = new Point(32, 517);
+            txtCashReceived.Margin = new Padding(3, 4, 3, 4);
+            txtCashReceived.Name = "txtCashReceived";
+            txtCashReceived.Size = new Size(411, 39);
+            txtCashReceived.TabIndex = 4;
+            txtCashReceived.TextChanged += txtCashReceived_TextChanged;
             // 
             // lblChangeHeader
             // 
-            this.lblChangeHeader.AutoSize = true;
-            this.lblChangeHeader.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblChangeHeader.Location = new System.Drawing.Point(15, 315);
-            this.lblChangeHeader.Name = "lblChangeHeader";
-            this.lblChangeHeader.Size = new System.Drawing.Size(125, 19);
-            this.lblChangeHeader.Text = "Tiền Thừa Trả Lại:";
-
+            lblChangeHeader.AutoSize = true;
+            lblChangeHeader.Font = new Font("Segoe UI", 10.5F);
+            lblChangeHeader.ForeColor = Color.FromArgb(71, 85, 105);
+            lblChangeHeader.Location = new Point(27, 593);
+            lblChangeHeader.Name = "lblChangeHeader";
+            lblChangeHeader.Size = new Size(133, 25);
+            lblChangeHeader.TabIndex = 9;
+            lblChangeHeader.Text = "Tiền thừa trả lại";
             // 
             // lblChange
             // 
-            this.lblChange.AutoSize = true;
-            this.lblChange.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblChange.ForeColor = System.Drawing.Color.DarkGreen;
-            this.lblChange.Location = new System.Drawing.Point(15, 340);
-            this.lblChange.Name = "lblChange";
-            this.lblChange.Size = new System.Drawing.Size(49, 30);
-            this.lblChange.Text = "0 đ";
-
+            lblChange.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            lblChange.ForeColor = Color.FromArgb(22, 163, 74);
+            lblChange.Location = new Point(27, 633);
+            lblChange.Name = "lblChange";
+            lblChange.Size = new Size(411, 53);
+            lblChange.TabIndex = 10;
+            lblChange.Text = "0 đ";
             // 
             // btnCheckout
             // 
-            this.btnCheckout.BackColor = System.Drawing.Color.ForestGreen;
-            this.btnCheckout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCheckout.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.btnCheckout.ForeColor = System.Drawing.Color.White;
-            this.btnCheckout.Location = new System.Drawing.Point(18, 400);
-            this.btnCheckout.Name = "btnCheckout";
-            this.btnCheckout.Size = new System.Drawing.Size(307, 50);
-            this.btnCheckout.TabIndex = 5;
-            this.btnCheckout.Text = "THANH TOÁN (F9)";
-            this.btnCheckout.UseVisualStyleBackColor = false;
-            this.btnCheckout.Click += new System.EventHandler(this.btnCheckout_Click);
-
+            btnCheckout.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btnCheckout.BackColor = Color.FromArgb(22, 163, 74);
+            btnCheckout.FlatAppearance.BorderSize = 0;
+            btnCheckout.FlatAppearance.MouseOverBackColor = Color.FromArgb(21, 128, 61);
+            btnCheckout.FlatStyle = FlatStyle.Flat;
+            btnCheckout.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnCheckout.ForeColor = Color.White;
+            btnCheckout.Location = new Point(32, 771);
+            btnCheckout.Margin = new Padding(3, 4, 3, 4);
+            btnCheckout.Name = "btnCheckout";
+            btnCheckout.Size = new Size(410, 72);
+            btnCheckout.TabIndex = 5;
+            btnCheckout.Text = "THANH TOÁN  (F9)";
+            btnCheckout.UseVisualStyleBackColor = false;
+            btnCheckout.Click += btnCheckout_Click;
             // 
             // btnClearCart
             // 
-            this.btnClearCart.BackColor = System.Drawing.Color.Crimson;
-            this.btnClearCart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClearCart.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnClearCart.ForeColor = System.Drawing.Color.White;
-            this.btnClearCart.Location = new System.Drawing.Point(18, 460);
-            this.btnClearCart.Name = "btnClearCart";
-            this.btnClearCart.Size = new System.Drawing.Size(307, 40);
-            this.btnClearCart.TabIndex = 6;
-            this.btnClearCart.Text = "HỦY GIỎ HÀNG";
-            this.btnClearCart.UseVisualStyleBackColor = false;
-            this.btnClearCart.Click += new System.EventHandler(this.btnClearCart_Click);
-
+            btnClearCart.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btnClearCart.BackColor = Color.FromArgb(254, 242, 242);
+            btnClearCart.FlatAppearance.BorderColor = Color.FromArgb(254, 202, 202);
+            btnClearCart.FlatAppearance.MouseOverBackColor = Color.FromArgb(254, 226, 226);
+            btnClearCart.FlatStyle = FlatStyle.Flat;
+            btnClearCart.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnClearCart.ForeColor = Color.FromArgb(220, 38, 38);
+            btnClearCart.Location = new Point(32, 856);
+            btnClearCart.Margin = new Padding(3, 4, 3, 4);
+            btnClearCart.Name = "btnClearCart";
+            btnClearCart.Size = new Size(410, 56);
+            btnClearCart.TabIndex = 6;
+            btnClearCart.Text = "HỦY GIỎ HÀNG";
+            btnClearCart.UseVisualStyleBackColor = false;
+            btnClearCart.Click += btnClearCart_Click;
             // 
             // FormPOS
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1000, 600);
-            this.Controls.Add(this.panelRight);
-            this.Controls.Add(this.panelLeft);
-            this.Name = "FormPOS";
-            this.Text = "Màn hình Bán hàng POS";
-            this.Load += new System.EventHandler(this.FormPOS_Load);
-            this.panelLeft.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCart)).EndInit();
-            this.panelTopLeft.ResumeLayout(false);
-            this.panelTopLeft.PerformLayout();
-            this.panelRight.ResumeLayout(false);
-            this.panelRight.PerformLayout();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(245, 247, 251);
+            ClientSize = new Size(1371, 960);
+            Controls.Add(panelRight);
+            Controls.Add(panelLeft);
+            Font = new Font("Segoe UI", 9F);
+            Margin = new Padding(3, 4, 3, 4);
+            MinimumSize = new Size(1255, 891);
+            Name = "FormPOS";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "MiniSupermarket | Bán hàng POS";
+            Load += FormPOS_Load;
+            panelLeft.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvCart).EndInit();
+            panelTopLeft.ResumeLayout(false);
+            panelTopLeft.PerformLayout();
+            panelRight.ResumeLayout(false);
+            panelRight.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion

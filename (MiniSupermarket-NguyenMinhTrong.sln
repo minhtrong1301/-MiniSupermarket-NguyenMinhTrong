@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.37411.7 d17.14
+# Visual Studio Version 18
+VisualStudioVersion = 18.10.12210.168 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniSupermarket.API", "MiniSupermarket.API\MiniSupermarket.API.csproj", "{47C6322B-7C9E-4EDB-ABAE-56E3A55A3F82}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniSupermarket.WinForms", "MiniSupermarket.WinForms\MiniSupermarket.WinForms.csproj", "{43BC6D10-6321-456C-9C81-DAA6FBB38C37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThucHanhAdoNet_Tiet1", "ThucHanhAdoNet_Tiet1\ThucHanhAdoNet_Tiet1.csproj", "{5D568CD0-3FBE-4C50-8395-E15293CBDE1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThucHanhTransaction_Tiet4", "ThucHanhTransaction_Tiet4\ThucHanhTransaction_Tiet4.csproj", "{7666816F-809F-442F-B439-D87EF0385555}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{43BC6D10-6321-456C-9C81-DAA6FBB38C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43BC6D10-6321-456C-9C81-DAA6FBB38C37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43BC6D10-6321-456C-9C81-DAA6FBB38C37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D568CD0-3FBE-4C50-8395-E15293CBDE1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D568CD0-3FBE-4C50-8395-E15293CBDE1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D568CD0-3FBE-4C50-8395-E15293CBDE1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D568CD0-3FBE-4C50-8395-E15293CBDE1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7666816F-809F-442F-B439-D87EF0385555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7666816F-809F-442F-B439-D87EF0385555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7666816F-809F-442F-B439-D87EF0385555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7666816F-809F-442F-B439-D87EF0385555}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

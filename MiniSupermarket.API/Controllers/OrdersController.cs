@@ -211,19 +211,38 @@ namespace MiniSupermarket.API.Controllers
             }
         }
 
-        // GET: api/orders/quick-report
-        [HttpGet("quick-report")]
-        public async Task<IActionResult> GetQuickReport()
-        {
-            // Đếm tổng số hóa đơn
-            int totalOrders = await _context.Orders.CountAsync();
 
-            // Tính tổng doanh thu từ các hóa đơn
-            decimal totalRevenue = await _context.Orders
+        // GET: api/orders/quick-report?date=2026-10-22
+        [HttpGet("quick-report")]
+        public async Task<IActionResult> GetQuickReport(
+            [FromQuery] DateTime? date)
+        {
+            // Nếu không truyền ngày, mặc định lấy ngày hiện tại
+            DateTime selectedDate = (date ?? DateTime.Today).Date;
+
+            // Xác định đầu ngày và đầu ngày kế tiếp
+            DateTime startDate = selectedDate;
+            DateTime endDate = startDate.AddDays(1);
+
+            // Lọc hóa đơn thuộc ngày được chọn
+            var ordersInDay = _context.Orders
+                .AsNoTracking()
+                .Where(o => o.OrderDate >= startDate
+                         && o.OrderDate < endDate);
+
+            // Đếm số hóa đơn trong ngày
+            int totalOrders = await ordersInDay.CountAsync();
+
+            // Tính tổng doanh thu trong ngày
+            decimal totalRevenue = await ordersInDay
                 .SumAsync(o => (decimal?)o.TotalAmount) ?? 0;
 
-            // Tìm sản phẩm bán chạy nhất dựa trên tổng số lượng đã bán
+            // Tìm sản phẩm bán nhiều nhất trong ngày đã chọn
             var bestSeller = await _context.OrderDetails
+                .AsNoTracking()
+                .Where(d => d.Order != null
+                         && d.Order.OrderDate >= startDate
+                         && d.Order.OrderDate < endDate)
                 .GroupBy(d => new
                 {
                     d.ProductId,
@@ -239,11 +258,38 @@ namespace MiniSupermarket.API.Controllers
 
             return Ok(new
             {
+                selectedDate = selectedDate.ToString("yyyy-MM-dd"),
                 totalOrders,
                 totalRevenue,
                 bestSeller = bestSeller?.ProductName ?? "Chưa có dữ liệu",
                 bestSellerQuantity = bestSeller?.TotalQuantity ?? 0
             });
+        }
+
+
+
+        // GET: api/orders
+        // Lấy danh sách đơn hàng mới nhất
+        [HttpGet]
+        public async Task<IActionResult> GetOrders()
+        {
+            var orders = await _context.Orders
+                .AsNoTracking()
+                .OrderByDescending(o => o.OrderDate)
+                .Select(o => new
+                {
+                    o.OrderId,
+                    o.CashierUsername,
+                    o.CustomerId,
+                    o.CustomerPhone,
+                    o.OrderDate,
+                    o.TotalAmount,
+                    o.CashReceived,
+                    o.ChangeAmount
+                })
+                .ToListAsync();
+
+            return Ok(orders);
         }
 
     }
